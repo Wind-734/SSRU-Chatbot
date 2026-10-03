@@ -4,94 +4,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+
+    <title>เข้าสู่ระบบ | SSRU Chatbot</title>
 
     <!-- Google Fonts: Prompt & Kanit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Prompt:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+        rel="stylesheet"
+    >
 
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Font Awesome Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
 
-    <!-- CSS ประจำโปรเจกต์ -->
-    <link rel="stylesheet" href="public/css/style.css">
-
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Tailwind Configuration -->
+    <!-- ตั้งค่า Tailwind -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Prompt', 'Kanit', 'sans-serif'],
+                        sans: ["Prompt", "Kanit", "sans-serif"]
                     },
                     colors: {
-                        sidebar: {
-                            bg: '#0B132B',
-                            hover: '#162244',
-                            active: '#1C2B54',
-                            text: '#FFFFFF',
-                            title: '#94A3B8'
-                        },
                         primary: {
-                            pink: '#FF4B8B',
-                            hover: '#E83B79',
+                            pink: "#F45BB0",
+                            hover: "#E5499E"
                         },
-                        chat: {
-                            userBg: '#F78DA7',
-                            mainBg: '#F8FAFC',
-                        }
-                    },
-                    animation: {
-                        'typing': 'typingBounce 1.4s infinite ease-in-out both',
-                        'fade-in': 'fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                    },
-                    keyframes: {
-                        typingBounce: {
-                            '0%, 80%, 100%': { transform: 'scale(0.6)', opacity: '0.5' },
-                            '40%': { transform: 'scale(1)', opacity: '1' },
-                        },
-                        fadeIn: {
-                            'from': { opacity: '0', transform: 'translateY(8px)' },
-                            'to': { opacity: '1', transform: 'translateY(0)' },
+                        page: {
+                            background: "#0F172A"
                         }
                     }
                 }
             }
-        }
+        };
     </script>
-
-    <!-- Scrollbar Styles -->
-    <style>
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 4px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(203, 213, 225, 1);
-            border-radius: 4px;
-        }
-
-        .sidebar-scrollbar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 4px;
-        }
-    </style>
 </head>
 
-<body class="bg-chat-mainBg text-slate-800 font-sans h-screen overflow-hidden flex antialiased">
+<body class="min-h-screen bg-page-background font-sans text-slate-800">
 
-    <!-- ใส่เนื้อหาโครงสร้างหน้าเว็บที่นี่ -->
+    <!-- พื้นที่หลักของหน้า Login -->
+    <main class="min-h-screen flex items-center justify-center px-4 py-10">
+
+        <!-- กล่อง Login -->
+        <section
+            class="w-full max-w-md rounded-2xl bg-white px-7 py-9 shadow-2xl sm:px-10"
+        >
+
+            <!-- โลโก้และชื่อเว็บไซต์ -->
+            <div class="mb-7 text-center">
+
+                <div
+                    class="mx-auto mb-3 flex h-14 w-14 items-center justify-center
+                           rounded-full bg-pink-50 text-2xl text-primary-pink"
+                >
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+
+                <h1 class="text-2xl font-semibold text-slate-900">
+                    SSRU Chatbot
+                </h1>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    มหาวิทยาลัยราชภัฏสวนสุนันทา
+                </p>
+
+                <p class="text-xs text-slate-400">
+                    Suan Sunandha Rajabhat University
+                </p>
+            </div>
+
+            <!-- แบบฟอร์มเข้าสู่ระบบ -->
+            <form id="loginForm" class="space-y-5">
+
+                <!-- ช่องรหัสนักศึกษา/อีเมล -->
+                <div>
+                    <label
+                        for="email"
+                        class="mb-2 block text-sm font-medium text-slate-700"
+                    >
+                        รหัสนักศึกษา หรืออีเมล
+                        <span class="text-slate-400">| Student ID / Email</span>
+                    </label>
+
+                    <div class="relative">
+                        <i
+                            class="fa-solid fa-user absolute left-4 top-1/2
+                                   -translate-y-1/2 text-slate-400"
+                        ></i>
+
+                        <input
+                            type="text"
+                            id="email"
+                            name="email"
+                            placeholder="เช่น 67122202083@ssru.ac.th"
+                            autocomplete="username"
+                            required
+                            class="w-full rounded-lg border border-slate-300
+                                   py-3 pl-11 pr-4 text-sm outline-none
+                                   transition placeholder:text-slate-400
+                                   focus:border-primary-pink
+                                   focus:ring-2 focus:ring-pink-100"
+                        >
+                    </div>
+                </div>
+
+                <!-- ช่องรหัสผ่าน -->
+                <div>
+                    <div class="mb-2 flex items-center justify-between">
+
+                        <label
+                            for="password"
+                            class="block text-sm font-medium text-slate-700"
+                        >
+                            รหัสผ่าน
+                            <span class="text-slate-400">| Password</span>
+                        </label>
+
+                        <a
+                            href="#"
+                            class="text-xs font-medium text-primary-pink
+                                   hover:text-primary-hover hover:underline"
+                        >
+                            ลืมรหัสผ่าน?
+                        </a>
+                    </div>
+
+                    <div class="relative">
+                        <i
+                            class="fa-solid fa-lock absolute left-4 top-1/2
+                                   -translate-y-1/2 text-slate-400"
+                        ></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="กรอกรหัสผ่าน"
+                            autocomplete="current-password"
+                            required
+                            class="w-full rounded-lg border border-slate-300
+                                   py-3 pl-11 pr-12 text-sm outline-none
+                                   transition placeholder:text-slate-400
+                                   focus:border-primary-pink
+                                   focus:ring-2 focus:ring-pink-100"
+                        >
+
+                        <!-- ปุ่มเปิด/ปิดรหัสผ่าน -->
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            aria-label="แสดงหรือซ่อนรหัสผ่าน"
+                            class="absolute right-4 top-1/2 -translate-y-1/2
+                                   text-slate-400 transition
+                                   hover:text-primary-pink"
+                        >
+                            <i id="passwordIcon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ตัวเลือกจดจำการเข้าสู่ระบบ -->
+                <label class="flex cursor-pointer items-center gap-2 text-sm text-slate-600">
+                    <input
+                        type="checkbox"
+                        name="remember"
+                        class="h-4 w-4 rounded border-slate-300
+                               accent-primary-pink"
+                    >
+                    จดจำการเข้าสู่ระบบ
+                </label>
+
+                <!-- ปุ่มเข้าสู่ระบบ -->
+                <button
+                    type="submit"
+                    class="w-full rounded-lg bg-primary-pink px-4 py-3
+                           font-medium text-white shadow-md transition
+                           hover:bg-primary-hover hover:shadow-lg
+                           focus:outline-none focus:ring-4 focus:ring-pink-200
+                           active:scale-[0.99]"
+                >
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i>
+                    เข้าสู่ระบบ
+                </button>
+            </form>
+
+            <!-- สมัครสมาชิก -->
+            <p class="mt-6 text-center text-sm text-slate-500">
+                ยังไม่มีบัญชี?
+
+                <a
+                    href="register.html"
+                    class="font-semibold text-primary-pink
+                           hover:text-primary-hover hover:underline"
+                >
+                    สมัครสมาชิก
+                </a>
+            </p>
+
+        </section>
+    </main>
+
+    <!-- JavaScript สำหรับเปิดและปิดการแสดงรหัสผ่าน -->
+    <script>
+        const passwordInput = document.getElementById("password");
+        const togglePasswordButton = document.getElementById("togglePassword");
+        const passwordIcon = document.getElementById("passwordIcon");
+
+        togglePasswordButton.addEventListener("click", function () {
+            const passwordIsHidden = passwordInput.type === "password";
+
+            passwordInput.type = passwordIsHidden ? "text" : "password";
+
+            passwordIcon.classList.toggle("fa-eye", !passwordIsHidden);
+            passwordIcon.classList.toggle("fa-eye-slash", passwordIsHidden);
+        });
+    </script>
 
 </body>
 
