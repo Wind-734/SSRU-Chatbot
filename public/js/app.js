@@ -12,27 +12,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.getElementById('sidebar');
   const sidebarOverlay = document.getElementById('sidebar-overlay');
 
-  // SSRU Knowledge Base fallback for Client-side UI
+  // SSRU Knowledge Base fallback for Client-side UI & Local Static Execution
   const SSRU_RESPONSES = [
     {
-      keywords: ['ลงทะเบียน', 'reg', 'เพิ่มถอน', 'ภาคเรียน'],
-      response: 'นักศึกษาสามารถลงทะเบียนผ่านเว็บไซต์ reg ssru และทำการเลือกเมนูลงทะเบียนเรียนด้วยตัวเอง จากนั้นเลือกเมนูลงทะเบียนเพิ่มถอนรายวิชา หรือติดตามประกาศปฏิทินวิชาการทาง reg.ssru.ac.th ค่ะ'
+      keywords: ['ช่องทาง', 'ชำระเงิน', 'จ่ายเงิน', 'ค่าธรรมเนียม', 'ค่าเทอม', 'การชำระเงิน', 'ใบชำระเงิน', 'invoice', 'qr code', 'โอนเงิน', 'ธนาคาร'],
+      response: 'การชำระเงินและค่าธรรมเนียมการศึกษา SSRU:\n1. การพิมพ์ใบชำระเงิน (Invoice): เข้าสู่ระบบ e-Regis (reg.ssru.ac.th) เมนู "พิมพ์ใบชำระเงิน"\n2. ช่องทางการชำระเงิน: ชำระผ่าน App Mobile Banking ทุกธนาคารโดยสแกน QR Code บนใบชำระเงิน หรือชำระผ่านเคาน์เตอร์ธนาคารกรุงเทพ / ธนาคารไทยพาณิชย์\n3. การขอผ่อนผันค่าเทอม: ยื่นคำร้องขอผ่อนผันออนไลน์ผ่านระบบ reg.ssru.ac.th หรือกองพัฒนานักศึกษา ตามกำหนดในปฏิทินการศึกษาค่ะ'
     },
     {
-      keywords: ['ผ่อนผัน', 'ค่าเทอม', 'จ่ายเงิน', 'ค่าธรรมเนียม'],
-      response: 'การขอผ่อนผันค่าธรรมเนียมการศึกษา นักศึกษาสามารถยื่นคำร้องผ่านระบบออนไลน์ของกองพัฒนานักศึกษา หรือติดต่อห้องการเงินของมหาวิทยาลัยตามกำหนดเวลาในปฏิทินการศึกษาค่ะ'
+      keywords: ['ลงทะเบียน', 'reg', 'เพิ่มถอน', 'ภาคเรียน', 'วิชา', 'แผนการเรียน', 'ลงเรียน'],
+      response: 'ขั้นตอนการลงทะเบียนเรียน มหาวิทยาลัยราชภัฏสวนสุนันทา:\n1. เข้าสู่ระบบ e-Regis ทางเว็บไซต์ reg.ssru.ac.th\n2. เลือกเมนู "ลงทะเบียนเรียน" และเลือกรายวิชาตามแผนการเรียน\n3. ตรวจสอบรายวิชาและกลุ่มเรียน (Sec) แล้วคลิกบันทึกและยืนยัน\n4. เพิ่ม-ถอนรายวิชา (Add/Drop) สามารถทำได้ภายใน 2 สัปดาห์แรกของการเปิดภาคเรียนผ่านระบบออนไลน์ค่ะ'
     },
     {
-      keywords: ['สอบ', 'ตารางสอบ', 'สอบปลายภาค', 'สอบกลางภาค'],
-      response: 'ตารางสอบปลายภาคเรียน สามารถตรวจสอบได้ที่เว็บไซต์ reg.ssru.ac.th ในเมนู "ตารางสอบนักศึกษา" โดยระบุรหัสนักศึกษาเพื่อดูวัน เวลา และห้องสอบค่ะ'
+      keywords: ['ผ่อนผัน', 'ขอผ่อนผัน', 'ผ่อนชำระ'],
+      response: 'การขอผ่อนผันค่าธรรมเนียมการศึกษา นักศึกษาสามารถยื่นคำร้องผ่านระบบออนไลน์ reg.ssru.ac.th หรือติดต่อกองพัฒนานักศึกษาตามกำหนดเวลาในปฏิทินการศึกษา โดยแนบสำเนาบัตรนักศึกษาและแบบฟอร์มขอผ่อนผันค่ะ'
     },
     {
-      keywords: ['รับรอง', 'เอกสาร', 'เกรด', 'transcript', 'ใบรับรอง'],
-      response: 'การขอหนังสือรับรองหรือใบรายงานผลการเรียน (Transcript) สามารถยื่นคำร้องออนไลน์ผ่านระบบ One Stop Service ของสำนักทะเบียนและประมวลผล หรือติดต่อด้วยตนเองที่อาคารสำนักงานอธิการบดีค่ะ'
+      keywords: ['สอบ', 'ตารางสอบ', 'สอบปลายภาค', 'สอบกลางภาค', 'ห้องสอบ'],
+      response: 'การตรวจสอบตารางสอบ: สามารถตรวจสอบวัน เวลา และห้องสอบกลางภาค/ปลายภาคได้ที่เว็บไซต์ reg.ssru.ac.th ในเมนู "ตารางสอบนักศึกษา" โดยระบุรหัสนักศึกษาค่ะ'
     },
     {
-      keywords: ['ทุน', '2568', 'กยศ', 'กรอ'],
-      response: 'มหาวิทยาลัยมีทุนการศึกษาหลายประเภท เช่น ทุนเรียนดี ทุนขาดแคลนทุนทรัพย์ และทุน กยศ./กรอ. ประจำปี 2568 สามารถติดตามรายละเอียดและสมัครยื่นเอกสารได้ที่ กองพัฒนานักศึกษา SSRU ค่ะ'
+      keywords: ['เกรด', 'แก้เกรด', 'ติด i', 'ผลการเรียน', 'gpax', 'เช็คเกรด', 'เช็คผลการเรียน'],
+      response: 'การตรวจสอบผลการเรียนและการขอแก้เกรด I:\n1. ตรวจสอบเกรด (เช็คเกรด) ประจำภาคเรียนได้ในระบบ e-Regis เมนู "ผลการเรียน"\n2. กรณีติดเกรด I ให้ติดต่ออาจารย์ผู้สอนเพื่อส่งงาน/สอบประเมินเพิ่มเติม แล้วยื่นคำร้องขอแก้เกรดต่อฝ่ายทะเบียนฯ ภายในระยะเวลาที่กำหนดค่ะ'
+    },
+    {
+      keywords: ['รับรอง', 'เอกสาร', 'transcript', 'ใบรับรอง', 'ใบเกรด', 'one stop'],
+      response: 'การขอเอกสารทางการศึกษาออนไลน์ (One Stop Service):\n1. ยื่นคำร้องขอเอกสารที่ reg.ssru.ac.th ในระบบ One Stop Service\n2. สามารถขอใบ Transcript (ไทย/อังกฤษ), หนังสือรับรองสถานภาพนักศึกษา หรือใบรับรองคาดว่าจะสำเร็จการศึกษา\n3. เลือกรับเป็นไฟล์ดิจิทัล PDF, รับด้วยตนเองที่ฝ่ายทะเบียนฯ อาคาร 32 ชั้น 1 หรือส่งทางไปรษณีย์ค่ะ'
+    },
+    {
+      keywords: ['ทุน', 'ทุนการศึกษา', '2568', 'กยศ', 'กรอ', 'กู้ยืม'],
+      response: 'ทุนการศึกษาและ กยศ./กรอ. SSRU:\n1. กู้ยืม กยศ./กรอ.: ยื่นคำร้องผ่านระบบ DSL ของกองทุนฯ และยืนยันข้อมูลในระบบ e-Regis / กองพัฒนานักศึกษา\n2. ทุนการศึกษา: มีทั้งทุนเรียนดี ทุนขาดแคลนทุนทรัพย์ และทุนกิจกรรม ติดตามประกาศเปิดรับสมัครทาง reg.ssru.ac.th และแฟนเพจกองพัฒนานักศึกษา SSRU ค่ะ'
+    },
+    {
+      keywords: ['ลาพัก', 'ลาพักการเรียน', 'พ้นสภาพ', 'รักษาสภาพ', 'คืนสภาพ'],
+      response: 'สถานภาพนักศึกษาและการลาพักการเรียน:\n1. การขอลาพักการเรียน: ยื่นคำร้องผ่านระบบ e-Regis โดยได้รับการอนุมัติจากอาจารย์ที่ปรึกษาและคณบดี\n2. การรักษาสภาพ: ต้องชำระค่าธรรมเนียมรักษาสภาพนักศึกษาตามกำหนดเพื่อป้องกันการพ้นสภาพค่ะ'
+    },
+    {
+      keywords: ['ติดต่อ', 'อาคาร 32', 'เวลาทำการ', 'ฝ่ายทะเบียน', 'สถานที่'],
+      response: 'ข้อมูลติดต่อ ฝ่ายทะเบียนและประมวลผล มหาวิทยาลัยราชภัฏสวนสุนันทา:\n- เว็บไซต์: reg.ssru.ac.th (ทางลัด: share.google/o9BnGzbQACRVfvE4n)\n- ที่ตั้ง: อาคาร 32 ชั้น 1 มหาวิทยาลัยราชภัฏสวนสุนันทา\n- เวลาทำการ: จันทร์ - ศุกร์ 08:30 - 16:30 น. (เว้นวันหยุดนักขัตฤกษ์)ค่ะ'
     }
   ];
 
@@ -244,7 +260,11 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       let botReply = '';
       try {
-        const res = await fetch('/api/chat', {
+        const apiUrl = (window.location.origin && window.location.origin.startsWith('http'))
+          ? '/api/chat'
+          : 'http://localhost:3000/api/chat';
+
+        const res = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: userMsg })
@@ -355,6 +375,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (sidebarOverlay) {
       sidebarOverlay.addEventListener('click', closeSidebarMobile);
+    }
+
+    const btnLogout = document.getElementById('btn-logout');
+    const logoutModal = document.getElementById('logout-modal');
+    const btnCancelLogout = document.getElementById('btn-cancel-logout');
+    const btnConfirmLogout = document.getElementById('btn-confirm-logout');
+
+    if (btnLogout) {
+      btnLogout.addEventListener('click', (e) => {
+        e.preventDefault();
+        openLogoutModal();
+      });
+    }
+
+    if (btnCancelLogout) {
+      btnCancelLogout.addEventListener('click', closeLogoutModal);
+    }
+
+    if (logoutModal) {
+      logoutModal.addEventListener('click', (e) => {
+        if (e.target === logoutModal) {
+          closeLogoutModal();
+        }
+      });
+    }
+
+    if (btnConfirmLogout) {
+      btnConfirmLogout.addEventListener('click', () => {
+        sessionStorage.clear();
+        localStorage.clear();
+        window.location.href = 'login.html';
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeLogoutModal();
+      }
+    });
+  }
+
+  function openLogoutModal() {
+    const logoutModal = document.getElementById('logout-modal');
+    const logoutModalCard = document.getElementById('logout-modal-card');
+    if (logoutModal && logoutModalCard) {
+      logoutModal.classList.remove('opacity-0', 'pointer-events-none');
+      logoutModal.classList.add('opacity-100', 'pointer-events-auto');
+      logoutModalCard.classList.remove('scale-95');
+      logoutModalCard.classList.add('scale-100');
+    }
+  }
+
+  function closeLogoutModal() {
+    const logoutModal = document.getElementById('logout-modal');
+    const logoutModalCard = document.getElementById('logout-modal-card');
+    if (logoutModal && logoutModalCard) {
+      logoutModal.classList.remove('opacity-100', 'pointer-events-auto');
+      logoutModal.classList.add('opacity-0', 'pointer-events-none');
+      logoutModalCard.classList.remove('scale-100');
+      logoutModalCard.classList.add('scale-95');
     }
   }
 

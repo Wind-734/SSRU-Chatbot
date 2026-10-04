@@ -585,6 +585,7 @@ body {
   display: flex;
   gap: 8px;
   overflow-x: auto;
+  padding-top: 6px;
   padding-bottom: 6px;
 }
 

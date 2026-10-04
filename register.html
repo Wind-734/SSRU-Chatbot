@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก | SSRU Chatbot</title>
+
+    <!-- ฟอนต์ภาษาไทย -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Prompt:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- ไอคอน -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tailwind CSS สำหรับแสดงตัวอย่างหน้าเว็บ -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Prompt", "Kanit", "sans-serif"]
+                    },
+                    colors: {
+                        primary: {
+                            pink: "#F45BB0",
+                            hover: "#E5499E"
+                        },
+                        page: {
+                            background: "#0F172A"
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+
+<body class="min-h-screen bg-page-background font-sans text-slate-800 antialiased">
+
+    <main class="flex min-h-screen items-center justify-center px-4 py-10">
+
+        <!-- กล่องสมัครสมาชิก -->
+        <section aria-labelledby="registerTitle"
+            class="w-full max-w-md rounded-2xl bg-white px-6 py-8 shadow-2xl sm:px-10">
+
+            <!-- ชื่อเว็บไซต์ -->
+            <header class="mb-7 text-center">
+                <div
+                    class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-pink-50 text-2xl text-primary-pink">
+                    <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                </div>
+
+                <h1 class="text-2xl font-semibold text-slate-900">
+                    SSRU Chatbot
+                </h1>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    มหาวิทยาลัยราชภัฏสวนสุนันทา
+                </p>
+
+                <h2 id="registerTitle" class="mt-5 text-lg font-medium">
+                    สมัครสมาชิก
+                </h2>
+
+                <p class="mt-1 text-xs text-slate-400">
+                    กรอกข้อมูลเพื่อสร้างบัญชีของคุณ
+                </p>
+            </header>
+
+            <!-- แบบฟอร์มสมัครสมาชิก -->
+            <form id="registerForm" class="space-y-4">
+
+                <!-- ชื่อและนามสกุล -->
+                <div>
+                    <label for="fullName" class="mb-2 block text-sm font-medium">
+                        ชื่อ–นามสกุล
+                    </label>
+
+                    <input type="text" id="fullName" name="fullName" autocomplete="name"
+                        placeholder="กรอกชื่อและนามสกุล" required
+                        class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
+                </div>
+
+                <!-- รหัสนักศึกษา -->
+                <div>
+                    <label for="studentId" class="mb-2 block text-sm font-medium">
+                        รหัสนักศึกษา
+                    </label>
+
+                    <input type="text" id="studentId" name="studentId" inputmode="numeric" pattern="[0-9]+"
+                        title="กรอกรหัสนักศึกษาเป็นตัวเลขเท่านั้น" placeholder="กรอกรหัสนักศึกษา" required
+                        class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
+                </div>
+
+                <!-- อีเมล -->
+                <div>
+                    <label for="email" class="mb-2 block text-sm font-medium">
+                        อีเมล
+                    </label>
+
+                    <input type="email" id="email" name="email" autocomplete="email"
+                        placeholder="เช่น student@ssru.ac.th" required
+                        class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
+                </div>
+
+                <!-- รหัสผ่าน -->
+                <div>
+                    <label for="password" class="mb-2 block text-sm font-medium">
+                        รหัสผ่าน
+                    </label>
+
+                    <div class="relative">
+                        <input type="password" id="password" name="password" autocomplete="new-password"
+                            aria-describedby="passwordHint" minlength="8" placeholder="สร้างรหัสผ่านของคุณ" required
+                            class="w-full rounded-lg border border-slate-300 py-3 pl-4 pr-12 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
+
+                        <button type="button" data-password-toggle="password" aria-controls="password"
+                            aria-label="แสดงรหัสผ่าน" aria-pressed="false"
+                            class="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-lg text-slate-400 hover:text-primary-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-pink">
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                    <p id="passwordHint" class="mt-2 text-xs text-slate-500">
+                        ใช้อย่างน้อย 8 ตัวอักษร
+                    </p>
+                </div>
+
+                <!-- ยืนยันรหัสผ่าน -->
+                <div>
+                    <label for="confirmPassword" class="mb-2 block text-sm font-medium">
+                        ยืนยันรหัสผ่าน
+                    </label>
+
+                    <div class="relative">
+                        <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password"
+                            minlength="8" placeholder="กรอกรหัสผ่านอีกครั้ง" required
+                            class="w-full rounded-lg border border-slate-300 py-3 pl-4 pr-12 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
+
+                        <button type="button" data-password-toggle="confirmPassword" aria-controls="confirmPassword"
+                            aria-label="แสดงรหัสผ่านยืนยัน" aria-pressed="false"
+                            class="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-lg text-slate-400 hover:text-primary-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-pink">
+                            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ปุ่มสมัครสมาชิก -->
+                <button type="submit"
+                    class="w-full rounded-lg bg-primary-pink px-4 py-3 font-medium text-white transition hover:bg-primary-hover focus:outline-none focus:ring-4 focus:ring-pink-200 active:scale-[0.99]">
+                    สมัครสมาชิก
+                </button>
+
+                <!-- ข้อความแจ้งผลสำหรับหน้าตัวอย่าง -->
+                <p id="formMessage" role="status"
+                    class="hidden rounded-lg bg-slate-100 p-3 text-sm leading-relaxed text-slate-700">
+                </p>
+            </form>
+
+            <!-- กลับไปหน้า Login -->
+            <p class="mt-6 text-center text-sm text-slate-500">
+                มีบัญชีอยู่แล้ว?
+                <a href="login.html" class="font-medium text-primary-pink hover:text-primary-hover hover:underline">
+                    เข้าสู่ระบบ
+                </a>
+            </p>
+
+        </section>
+    </main>
+
+    <script>
+        const form = document.getElementById("registerForm");
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirmPassword");
+        const formMessage = document.getElementById("formMessage");
+
+        // เปิด–ปิดการแสดงรหัสผ่าน
+        document.querySelectorAll("[data-password-toggle]").forEach((button) => {
+            button.addEventListener("click", () => {
+                const input = document.getElementById(
+                    button.dataset.passwordToggle
+                );
+                const showPassword = input.type === "password";
+                const icon = button.querySelector("i");
+                const suffix = input.id === "confirmPassword" ? "ยืนยัน" : "";
+
+                input.type = showPassword ? "text" : "password";
+                button.setAttribute("aria-pressed", String(showPassword));
+                button.setAttribute(
+                    "aria-label",
+                    (showPassword ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน") + suffix
+                );
+
+                icon.classList.toggle("fa-eye", !showPassword);
+                icon.classList.toggle("fa-eye-slash", showPassword);
+            });
+        });
+
+        // ตรวจสอบว่ารหัสผ่านทั้งสองช่องตรงกัน
+        function validatePasswords() {
+            const mismatch =
+                confirmPassword.value !== "" &&
+                password.value !== confirmPassword.value;
+
+            confirmPassword.setCustomValidity(
+                mismatch ? "รหัสผ่านไม่ตรงกัน กรุณากรอกอีกครั้ง" : ""
+            );
+        }
+
+        password.addEventListener("input", validatePasswords);
+        confirmPassword.addEventListener("input", validatePasswords);
+
+        form.addEventListener("input", () => {
+            formMessage.classList.add("hidden");
+        });
+
+        // หน้าตัวอย่าง: ยังไม่ส่งข้อมูลไปสร้างบัญชีจริง
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            validatePasswords();
+
+            if (!form.reportValidity()) {
+                return;
+            }
+
+            formMessage.textContent =
+                "ข้อมูลผ่านการตรวจสอบเบื้องต้นแล้ว แต่ยังไม่ได้สร้างบัญชี เนื่องจากหน้านี้ยังไม่ได้เชื่อมต่อระบบสมัครสมาชิก";
+            formMessage.classList.remove("hidden");
+        });
+    </script>
+
+</body>
+
+</html>

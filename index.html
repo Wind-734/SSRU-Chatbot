@@ -139,11 +139,11 @@
             67122202083</span>
         </div>
       </div>
-      <button
-        class="text-slate-500 hover:text-white hover:bg-white/10 text-base cursor-pointer p-2 rounded-md transition-colors"
+      <a href="login.html"
+        class="text-slate-500 hover:text-white hover:bg-white/10 text-base cursor-pointer p-2 rounded-md transition-colors flex items-center justify-center"
         title="ออกจากระบบ" id="btn-logout">
         <i class="fa-solid fa-right-from-bracket"></i>
-      </button>
+      </a>
     </div>
   </aside>
 
@@ -190,7 +190,7 @@
     <!-- Quick Prompt Suggestions -->
     <div class="px-6 pb-3 w-full max-w-[900px] mx-auto" id="quick-prompts-container">
       <div class="text-xs font-medium text-slate-500 mb-2">คำถามแนะนำ:</div>
-      <div class="flex gap-2 overflow-x-auto pb-1.5 custom-scrollbar">
+      <div class="flex gap-2 overflow-x-auto py-1.5 custom-scrollbar">
         <button
           class="prompt-chip bg-white border border-slate-200 rounded-[20px] px-3.5 py-2 text-[13px] text-slate-700 whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-primary-pink hover:bg-pink-50 hover:text-primary-pink hover:-translate-y-[1px]"
           data-prompt="การลงทะเบียนเรียนภาคเรียนที่ 2">
@@ -232,9 +232,31 @@
         SSRU Chatbot อาจให้ข้อมูลที่ไม่ถูกต้อง โปรดตรวจสอบข้อมูลสำคัญอีกครั้ง
       </div>
     </div>
-  </main>
+    <!-- Logout Confirmation Modal -->
+    <div id="logout-modal"
+      class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+      <div id="logout-modal-card"
+        class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-all duration-300 text-center">
+        <div
+          class="w-14 h-14 bg-pink-50 text-primary-pink rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-pink-100">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-slate-800 mb-1">ยืนยันการออกจากระบบ</h3>
+        <p class="text-sm text-slate-500 mb-6">คุณต้องการออกจากระบบ SSRU Chatbot ใช่หรือไม่?</p>
+        <div class="flex items-center gap-3">
+          <button type="button" id="btn-cancel-logout"
+            class="flex-1 py-2.5 px-4 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors cursor-pointer">
+            ยกเลิก
+          </button>
+          <button type="button" id="btn-confirm-logout"
+            class="flex-1 py-2.5 px-4 bg-primary-pink text-white rounded-xl text-sm font-medium hover:bg-pink-600 transition-colors cursor-pointer shadow-md shadow-pink-200">
+            ออกจากระบบ
+          </button>
+        </div>
+      </div>
+    </div>
 
-  <script src="public/js/app.js"></script>
+    <script src="public/js/app.js"></script>
 </body>
 
 </html>
