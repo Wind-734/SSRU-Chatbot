@@ -14,7 +14,9 @@
         rel="stylesheet">
 
     <!-- ไอคอน -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- Tailwind CSS สำหรับแสดงตัวอย่างหน้าเว็บ -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -46,7 +48,8 @@
     <main class="flex min-h-screen items-center justify-center px-4 py-10">
 
         <!-- กล่องสมัครสมาชิก -->
-        <section aria-labelledby="registerTitle"
+        <section
+            aria-labelledby="registerTitle"
             class="w-full max-w-md rounded-2xl bg-white px-6 py-8 shadow-2xl sm:px-10">
 
             <!-- ชื่อเว็บไซต์ -->
@@ -82,8 +85,13 @@
                         ชื่อ–นามสกุล
                     </label>
 
-                    <input type="text" id="fullName" name="fullName" autocomplete="name"
-                        placeholder="กรอกชื่อและนามสกุล" required
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        autocomplete="name"
+                        placeholder="กรอกชื่อและนามสกุล"
+                        required
                         class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
                 </div>
 
@@ -93,8 +101,15 @@
                         รหัสนักศึกษา
                     </label>
 
-                    <input type="text" id="studentId" name="studentId" inputmode="numeric" pattern="[0-9]+"
-                        title="กรอกรหัสนักศึกษาเป็นตัวเลขเท่านั้น" placeholder="กรอกรหัสนักศึกษา" required
+                    <input
+                        type="text"
+                        id="studentId"
+                        name="studentId"
+                        inputmode="numeric"
+                        pattern="[0-9]+"
+                        title="กรอกรหัสนักศึกษาเป็นตัวเลขเท่านั้น"
+                        placeholder="กรอกรหัสนักศึกษา"
+                        required
                         class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
                 </div>
 
@@ -104,8 +119,13 @@
                         อีเมล
                     </label>
 
-                    <input type="email" id="email" name="email" autocomplete="email"
-                        placeholder="เช่น student@ssru.ac.th" required
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        autocomplete="email"
+                        placeholder="เช่น student@ssru.ac.th"
+                        required
                         class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
                 </div>
 
@@ -116,12 +136,23 @@
                     </label>
 
                     <div class="relative">
-                        <input type="password" id="password" name="password" autocomplete="new-password"
-                            aria-describedby="passwordHint" minlength="8" placeholder="สร้างรหัสผ่านของคุณ" required
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            autocomplete="new-password"
+                            aria-describedby="passwordHint"
+                            minlength="8"
+                            placeholder="สร้างรหัสผ่านของคุณ"
+                            required
                             class="w-full rounded-lg border border-slate-300 py-3 pl-4 pr-12 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
 
-                        <button type="button" data-password-toggle="password" aria-controls="password"
-                            aria-label="แสดงรหัสผ่าน" aria-pressed="false"
+                        <button
+                            type="button"
+                            data-password-toggle="password"
+                            aria-controls="password"
+                            aria-label="แสดงรหัสผ่าน"
+                            aria-pressed="false"
                             class="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-lg text-slate-400 hover:text-primary-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-pink">
                             <i class="fa-solid fa-eye" aria-hidden="true"></i>
                         </button>
@@ -139,12 +170,22 @@
                     </label>
 
                     <div class="relative">
-                        <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password"
-                            minlength="8" placeholder="กรอกรหัสผ่านอีกครั้ง" required
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            autocomplete="new-password"
+                            minlength="8"
+                            placeholder="กรอกรหัสผ่านอีกครั้ง"
+                            required
                             class="w-full rounded-lg border border-slate-300 py-3 pl-4 pr-12 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
 
-                        <button type="button" data-password-toggle="confirmPassword" aria-controls="confirmPassword"
-                            aria-label="แสดงรหัสผ่านยืนยัน" aria-pressed="false"
+                        <button
+                            type="button"
+                            data-password-toggle="confirmPassword"
+                            aria-controls="confirmPassword"
+                            aria-label="แสดงรหัสผ่านยืนยัน"
+                            aria-pressed="false"
                             class="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-lg text-slate-400 hover:text-primary-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-pink">
                             <i class="fa-solid fa-eye" aria-hidden="true"></i>
                         </button>
@@ -152,13 +193,16 @@
                 </div>
 
                 <!-- ปุ่มสมัครสมาชิก -->
-                <button type="submit"
+                <button
+                    type="submit"
                     class="w-full rounded-lg bg-primary-pink px-4 py-3 font-medium text-white transition hover:bg-primary-hover focus:outline-none focus:ring-4 focus:ring-pink-200 active:scale-[0.99]">
                     สมัครสมาชิก
                 </button>
 
                 <!-- ข้อความแจ้งผลสำหรับหน้าตัวอย่าง -->
-                <p id="formMessage" role="status"
+                <p
+                    id="formMessage"
+                    role="status"
                     class="hidden rounded-lg bg-slate-100 p-3 text-sm leading-relaxed text-slate-700">
                 </p>
             </form>
@@ -166,7 +210,9 @@
             <!-- กลับไปหน้า Login -->
             <p class="mt-6 text-center text-sm text-slate-500">
                 มีบัญชีอยู่แล้ว?
-                <a href="login.html" class="font-medium text-primary-pink hover:text-primary-hover hover:underline">
+                <a
+                    href="login.html"
+                    class="font-medium text-primary-pink hover:text-primary-hover hover:underline">
                     เข้าสู่ระบบ
                 </a>
             </p>
