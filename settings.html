@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ตั้งค่า | SSRU Chatbot</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Prompt:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="public/css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Prompt", "Kanit", sans-serif;
+            background: #F8FAFC;
+            color: #1E293B;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Header matching user.html & index.html */
+        .header {
+            height: 70px;
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            border-bottom: 1px solid #E2E8F0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 19px;
+            font-weight: 600;
+            color: #0F172A;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .logo:hover {
+            opacity: 0.9;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: transparent;
+            color: #FF4B8B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #CBD5E1;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 10px;
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            color: #FF4B8B;
+            background: #334155;
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 36px auto;
+            padding: 0 20px 40px;
+        }
+
+        .title {
+            color: #0F172A;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            transition: color 0.3s ease;
+        }
+
+        .subtitle {
+            color: #64748B;
+            font-size: 14.5px;
+            margin-bottom: 24px;
+            transition: color 0.3s ease;
+        }
+
+        /* Settings Card */
+        .settings-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 8px 24px 20px;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            padding: 22px 0 10px;
+            color: #FF4B8B;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #F1F5F9;
+            gap: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: #FFF0F5;
+            color: #FF4B8B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .setting-text h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 2px;
+            transition: color 0.3s ease;
+        }
+
+        .setting-text p {
+            font-size: 12.5px;
+            color: #64748B;
+            transition: color 0.3s ease;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            width: 50px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #CBD5E1;
+            border-radius: 30px;
+            transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            left: 3px;
+            top: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        input:checked+.slider {
+            background: #FF4B8B;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Select Input */
+        select {
+            border: 1px solid #CBD5E1;
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-family: inherit;
+            font-size: 14px;
+            color: #1E293B;
+            background-color: #FFFFFF;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        select:focus {
+            border-color: #FF4B8B;
+            box-shadow: 0 0 0 3px rgba(255, 75, 139, 0.15);
+        }
+
+        /* Action Buttons */
+        .btn-action-secondary {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            font-family: inherit;
+            border: 1px solid #FCA5A5;
+            background: #FEF2F2;
+            color: #EF4444;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-secondary:hover {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .account-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #FF4B8B;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .account-link:hover {
+            color: #E83B79;
+        }
+
+        /* Logout Button */
+        .logout {
+            width: 100%;
+            margin: 28px 0 10px;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #FF4B8B;
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(255, 75, 139, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .logout:hover {
+            background: #E83B79;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(255, 75, 139, 0.4);
+        }
+
+        /* Dark Mode Styles */
+        body.dark {
+            background: #0F172A;
+            color: #F8FAFC;
+        }
+
+        body.dark .header {
+            background: #0F172A;
+            border-color: #334155;
+        }
+
+        body.dark .logo {
+            color: #FFFFFF;
+        }
+
+        body.dark .back-btn {
+            background: transparent;
+            color: #CBD5E1;
+        }
+
+        body.dark .back-btn:hover {
+            background: #334155;
+            color: #FF4B8B;
+        }
+
+        body.dark .title {
+            color: #F8FAFC;
+        }
+
+        body.dark .subtitle {
+            color: #94A3B8;
+        }
+
+        body.dark .settings-card {
+            background: #1E293B;
+            border-color: #334155;
+        }
+
+        body.dark .setting-item {
+            border-color: #334155;
+        }
+
+        body.dark .icon {
+            background: #334155;
+            color: #FF4B8B;
+        }
+
+        body.dark .setting-text h3 {
+            color: #F8FAFC;
+        }
+
+        body.dark .setting-text p {
+            color: #94A3B8;
+        }
+
+        body.dark select {
+            background: #0F172A;
+            color: #F8FAFC;
+            border-color: #475569;
+        }
+
+        body.dark .btn-action-secondary {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #FCA5A5;
+        }
+
+        body.dark .btn-action-secondary:hover {
+            background: rgba(239, 68, 68, 0.25);
+            color: #F87171;
+        }
+
+        /* Modals & Overlay */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 24px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        body.dark .modal-card {
+            background: #1E293B;
+            color: #F8FAFC;
+        }
+
+        body.dark .modal-card h3 {
+            color: #F8FAFC;
+        }
+
+        body.dark .modal-card p {
+            color: #94A3B8;
+        }
+
+        .modal-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 16px;
+        }
+
+        .modal-icon.pink {
+            background: #FFF0F5;
+            color: #FF4B8B;
+            border: 1px solid #FFE4E6;
+        }
+
+        .modal-icon.red {
+            background: #FEF2F2;
+            color: #EF4444;
+            border: 1px solid #FEE2E2;
+        }
+
+        body.dark .modal-icon.pink {
+            background: rgba(255, 75, 139, 0.15);
+            border-color: rgba(255, 75, 139, 0.3);
+        }
+
+        body.dark .modal-icon.red {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .modal-btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-modal-cancel {
+            background: #F1F5F9;
+            color: #475569;
+            border-color: #E2E8F0;
+        }
+
+        .btn-modal-cancel:hover {
+            background: #E2E8F0;
+        }
+
+        body.dark .btn-modal-cancel {
+            background: #334155;
+            color: #CBD5E1;
+            border-color: #475569;
+        }
+
+        body.dark .btn-modal-cancel:hover {
+            background: #475569;
+        }
+
+        .btn-modal-confirm-pink {
+            background: #FF4B8B;
+            color: white;
+        }
+
+        .btn-modal-confirm-pink:hover {
+            background: #E83B79;
+        }
+
+        .btn-modal-confirm-red {
+            background: #EF4444;
+            color: white;
+        }
+
+        .btn-modal-confirm-red:hover {
+            background: #DC2626;
+        }
+
+        /* Toast Container */
+        #toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: #1E293B;
+            color: #FFFFFF;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 13.5px;
+            font-weight: 500;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1), fadeOut 0.3s ease 2.7s forwards;
+        }
+
+        .toast i {
+            color: #10B981;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 640px) {
+            .header {
+                padding: 0 16px;
+            }
+
+            .container {
+                margin-top: 20px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .settings-card {
+                padding: 4px 16px 16px;
+            }
+
+            .setting-text p {
+                max-width: 180px;
+            }
+        }
+    </style>
+    <script>
+        if (localStorage.getItem("darkMode") === "true") {
+            document.documentElement.classList.add("dark");
+        }
+    </script>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <span data-i18n="site_title">SSRU Chatbot</span>
+        </a>
+
+        <a href="index.html" class="back-btn">
+            <span data-i18n="back_to_main">กลับหน้าหลัก</span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <h1 class="title" data-i18n="settings_title">ตั้งค่า</h1>
+        <p class="subtitle" data-i18n="settings_subtitle">ปรับแต่งการใช้งาน SSRU Chatbot ของคุณ</p>
+
+        <div class="settings-card">
+
+            <!-- General Settings -->
+            <div class="section-title" data-i18n="section_general">การตั้งค่าทั่วไป</div>
+
+            <!-- Dark Mode -->
+            <div class="setting-item">
+                <div class="setting-left">
+                    <div class="icon">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                    <div class="setting-text">
+                        <h3 data-i18n="dark_mode_title">โหมดมืด</h3>
+                        <p data-i18n="dark_mode_desc">เปลี่ยนรูปแบบหน้าจอเป็นโหมดมืด</p>
+                    </div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="darkMode">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Notification -->
+            <div class="setting-item">
+                <div class="setting-left">
+                    <div class="icon">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+                    <div class="setting-text">
+                        <h3 data-i18n="notification_title">การแจ้งเตือน</h3>
+                        <p data-i18n="notification_desc">เปิดหรือปิดการแจ้งเตือนระบบ</p>
+                    </div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="notification">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Language -->
+            <div class="setting-item">
+                <div class="setting-left">
+                    <div class="icon">
+                        <i class="fa-solid fa-language"></i>
+                    </div>
+                    <div class="setting-text">
+                        <h3 data-i18n="language_title">ภาษา</h3>
+                        <p data-i18n="language_desc">เลือกภาษาที่ใช้แสดงผลในระบบ</p>
+                    </div>
+                </div>
+                <select id="language">
+                    <option value="th">ภาษาไทย (TH)</option>
+                    <option value="en">English (EN)</option>
+                </select>
+            </div>
+
+            <!-- Data & Storage -->
+            <div class="section-title" data-i18n="section_data">ข้อมูลและการบันทึก</div>
+
+            <!-- Clear History -->
+            <div class="setting-item">
+                <div class="setting-left">
+                    <div class="icon">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </div>
+                    <div class="setting-text">
+                        <h3 data-i18n="chat_history_title">ประวัติการสนทนา</h3>
+                        <p data-i18n="chat_history_desc">ล้างประวัติข้อความการสนทนาทั้งหมด</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-action-secondary" id="btn-open-clear-modal" data-i18n="btn_clear_history">
+                    ล้างประวัติ
+                </button>
+            </div>
+
+            <!-- Account Info -->
+            <div class="section-title" data-i18n="section_account">ข้อมูลบัญชี</div>
+
+            <div class="setting-item">
+                <div class="setting-left">
+                    <div class="icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="setting-text">
+                        <h3 data-i18n="user_account_title">บัญชีผู้ใช้งาน</h3>
+                        <p data-i18n="user_account_desc">จัดการข้อมูลโปรไฟล์ส่วนตัวของคุณ</p>
+                    </div>
+                </div>
+                <a href="user.html" class="account-link">
+                    <span data-i18n="view_profile">ดูโปรไฟล์</span>
+                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                </a>
+            </div>
+
+            <!-- Logout -->
+            <button class="logout" id="btn-open-logout-modal">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span data-i18n="logout">ออกจากระบบ</span>
+            </button>
+
+        </div>
+    </main>
+
+    <!-- Clear History Modal -->
+    <div class="modal-overlay" id="clear-history-modal">
+        <div class="modal-card">
+            <div class="modal-icon red">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 4px;" data-i18n="clear_modal_title">ยืนยันการล้างประวัติแชท</h3>
+            <p style="font-size: 13.5px; margin-bottom: 20px;" data-i18n="clear_modal_desc">คุณต้องการลบประวัติการสนทนาทั้งหมดใช่หรือไม่?
+                (การกระทำนี้ไม่สามารถย้อนกลับได้)</p>
+            <div class="modal-btn-group">
+                <button type="button" class="btn-modal btn-modal-cancel" id="btn-cancel-clear" data-i18n="cancel">ยกเลิก</button>
+                <button type="button" class="btn-modal btn-modal-confirm-red"
+                    id="btn-confirm-clear" data-i18n="btn_clear_history">ล้างประวัติ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="modal-overlay" id="logout-modal">
+        <div class="modal-card">
+            <div class="modal-icon pink">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 4px;" data-i18n="logout_modal_title">ยืนยันการออกจากระบบ</h3>
+            <p style="font-size: 13.5px; margin-bottom: 20px;" data-i18n="logout_modal_desc">คุณต้องการออกจากระบบ SSRU Chatbot ใช่หรือไม่?</p>
+            <div class="modal-btn-group">
+                <button type="button" class="btn-modal btn-modal-cancel" id="btn-cancel-logout" data-i18n="cancel">ยกเลิก</button>
+                <button type="button" class="btn-modal btn-modal-confirm-pink"
+                    id="btn-confirm-logout" data-i18n="logout">ออกจากระบบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <script src="setting.js"></script>
+</body>
+
+</html>

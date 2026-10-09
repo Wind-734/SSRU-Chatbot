@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>โปรไฟล์ผู้ใช้ | SSRU Chatbot</title>
+
+    <!-- Google Fonts: Prompt & Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Prompt:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="public/css/style.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ตั้งค่า Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Prompt", "Kanit", "sans-serif"]
+                    },
+                    colors: {
+                        primary: {
+                            pink: "#F45BB0",
+                            hover: "#E5499E"
+                        },
+                        page: {
+                            background: "#F8FAFC"
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Prompt", "Kanit", sans-serif;
+            background: #F8FAFC;
+            color: #1E293B;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            height: 70px;
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #0F172A;
+        }
+
+        .logo i {
+            color: #F45BAF;
+            font-size: 25px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #475569;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            color: #F45BAF;
+        }
+
+        /* Main */
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .title {
+            color: #0F172A;
+            font-size: 30px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #64748B;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        /* Settings Card */
+        .settings-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 10px 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 500;
+            padding: 20px 0 10px;
+            color: #1E293B;
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 72px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #FFF0F8;
+            color: #F45BAF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .setting-text h3 {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+
+        .setting-text p {
+            font-size: 12px;
+            color: #94A3B8;
+        }
+
+        /* Toggle */
+        .switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background: #CBD5E1;
+            border-radius: 30px;
+            transition: 0.25s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 3px;
+            top: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.25s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        input:checked+.slider {
+            background: #F45BAF;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Select */
+        select {
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: #F45BAF;
+        }
+
+        /* Account */
+        .account-info {
+            color: #64748B;
+            font-size: 14px;
+        }
+
+        /* Logout */
+        .logout {
+            width: 100%;
+            margin: 25px 0 15px;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            background: #F45BAF;
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .logout:hover {
+            background: #E5499E;
+            transform: translateY(-1px);
+        }
+
+        /* Dark Mode */
+        body.dark {
+            background: #020617 !important;
+            color: #F8FAFC !important;
+        }
+
+        body.dark header {
+            background: #0F172A !important;
+            border-color: #334155 !important;
+        }
+
+        body.dark main {
+            background: #0F172A !important;
+        }
+
+        body.dark aside,
+        body.dark section>div {
+            background-color: #1E293B !important;
+            border-color: #334155 !important;
+            color: #F8FAFC !important;
+        }
+
+        body.dark h1,
+        body.dark h2,
+        body.dark h3,
+        body.dark label {
+            color: #F8FAFC !important;
+        }
+
+        body.dark p,
+        body.dark .text-slate-500,
+        body.dark .text-slate-400,
+        body.dark .text-slate-600 {
+            color: #94A3B8 !important;
+        }
+
+        body.dark input,
+        body.dark textarea,
+        body.dark select {
+            background-color: #0F172A !important;
+            border-color: #334155 !important;
+            color: #F8FAFC !important;
+        }
+
+        body.dark input::placeholder,
+        body.dark textarea::placeholder {
+            color: #64748B !important;
+        }
+
+        body.dark .border-slate-100,
+        body.dark .border-slate-200 {
+            border-color: #334155 !important;
+        }
+
+        body.dark .bg-slate-50 {
+            background-color: #0F172A !important;
+        }
+
+        body.dark nav a {
+            color: #94A3B8;
+        }
+
+        body.dark nav a:hover {
+            background-color: #334155;
+            color: #F45BB0;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .header {
+                padding: 0 18px;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+            .title {
+                font-size: 25px;
+            }
+
+            .settings-card {
+                padding: 10px 18px;
+            }
+
+            .setting-text p {
+                max-width: 190px;
+            }
+        }
+    </style>
+    <script>
+        if (localStorage.getItem("darkMode") === "true") {
+            document.documentElement.classList.add("dark");
+        }
+    </script>
+</head>
+
+<body class="min-h-screen bg-page-background font-sans text-slate-800">
+    <!-- Profile Page -->
+    <div class="min-h-screen flex flex-col">
+
+        <!-- Top Header -->
+        <header class="header h-[70px] flex items-center justify-between px-6 md:px-10">
+
+            <!-- Logo : Left -->
+            <div class="flex items-center gap-2">
+                <a href="index.html" class="flex items-center gap-3 group hover:opacity-90 transition-opacity logo">
+                    <div class="w-8 h-8 rounded-full text-primary-pink flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <span class="text-lg font-semibold tracking-[0.3px]">SSRU Chatbot</span>
+                </a>
+            </div>
+
+            <!-- Back Button : Right -->
+            <a href="index.html" class="back-btn flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200">
+                <span class="text-sm" data-i18n="back_to_main">กลับหน้าหลัก</span>
+                <i class="fa-solid fa-arrow-right text-base"></i>
+            </a>
+        </header>
+
+
+        <!-- Main -->
+        <main class="flex-1 bg-[#fafbfc]">
+
+            <div class="max-w-6xl mx-auto px-5 md:px-8 py-8 md:py-12">
+
+                <!-- Profile Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-8">
+
+
+                    <!-- ================================= -->
+                    <!-- LEFT : PROFILE -->
+                    <!-- ================================= -->
+                    <aside class="bg-white rounded-2xl p-6 h-fit
+                                  border border-slate-100
+                                  shadow-[0_4px_20px_rgba(0,0,0,0.04)]">
+
+                        <!-- Avatar -->
+                        <div class="flex justify-center mb-5">
+
+                            <div class="relative">
+
+                                <div class="w-36 h-36 rounded-full
+                                            bg-gradient-to-br from-pink-300
+                                            via-pink-400 to-orange-300
+                                            p-[5px]">
+
+                                    <div
+                                        id="profile-avatar-large"
+                                        class="w-full h-full rounded-full bg-primary-pink text-white flex items-center justify-center font-bold text-5xl border-4 border-white shadow-inner">
+                                        R
+                                    </div>
+
+                                </div>
+
+                                <!-- Add Button -->
+                                <button class="absolute bottom-0 right-0
+                                           w-11 h-11 rounded-full
+                                           bg-pink-500 text-white
+                                           flex items-center justify-center
+                                           border-4 border-white
+                                           shadow-md
+                                           hover:bg-pink-600
+                                           hover:scale-105
+                                           transition-all">
+
+                                    <i class="fa-solid fa-plus text-lg"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Name -->
+                        <div class="text-center">
+
+                            <h1 id="profile-heading-name" class="text-2xl font-semibold text-slate-800" data-i18n="profile_heading">
+                                ชื่อโปรไฟล์
+                            </h1>
+
+                            <p id="profile-heading-role" class="text-sm text-slate-500 mt-1" data-i18n="profile_role">
+                                นักศึกษา
+                            </p>
+
+                            <p id="profile-heading-id" class="text-xs text-pink-500 mt-1 font-medium">
+                                รหัสนักศึกษา: -
+                            </p>
+
+                        </div>
+
+
+
+
+                    </aside>
+
+
+
+                    <!-- ================================= -->
+                    <!-- RIGHT : PROFILE INFORMATION -->
+                    <!-- ================================= -->
+                    <section class="space-y-6">
+
+
+                        <!-- =============================== -->
+                        <!-- Profile Information -->
+                        <!-- =============================== -->
+                        <div id="profile" class="bg-white rounded-2xl
+                                    border border-slate-100
+                                    shadow-[0_4px_20px_rgba(0,0,0,0.04)]
+                                    overflow-hidden">
+
+                            <!-- Section Header -->
+                            <div class="px-6 md:px-8 py-5 border-b border-slate-100">
+
+                                <h2 class="text-xl font-semibold text-slate-800" data-i18n="my_profile">
+                                    โปรไฟล์ของฉัน
+                                </h2>
+
+                                <p class="text-sm text-slate-400 mt-1" data-i18n="profile_desc">
+                                    ข้อมูลผู้ใช้งานและรายละเอียดโปรไฟล์
+                                </p>
+
+                            </div>
+
+
+                            <!-- Information -->
+                            <div class="p-6 md:p-8">
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+
+                                    <!-- First Name -->
+                                    <div>
+
+                                        <label class="block text-sm font-medium
+                                                      text-slate-600 mb-2" data-i18n="first_name">
+                                            ชื่อ
+                                        </label>
+
+                                        <div class="relative">
+
+                                            <i class="fa-regular fa-user
+                                                      absolute left-4 top-1/2
+                                                      -translate-y-1/2
+                                                      text-slate-400"></i>
+
+                                            <input type="text" id="profile-first-name" placeholder="กรอกชื่อ" data-i18n-placeholder="placeholder_first_name" class="w-full h-12 pl-11 pr-4
+                                                       rounded-xl
+                                                       border border-slate-200
+                                                       bg-slate-50
+                                                       outline-none
+                                                       focus:border-pink-400
+                                                       focus:ring-2
+                                                       focus:ring-pink-100
+                                                       transition">
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Last Name -->
+                                    <div>
+
+                                        <label class="block text-sm font-medium
+                                                      text-slate-600 mb-2" data-i18n="last_name">
+                                            นามสกุล
+                                        </label>
+
+                                        <div class="relative">
+
+                                            <i class="fa-regular fa-user
+                                                      absolute left-4 top-1/2
+                                                      -translate-y-1/2
+                                                      text-slate-400"></i>
+
+                                            <input type="text" id="profile-last-name" placeholder="กรอกนามสกุล" data-i18n-placeholder="placeholder_last_name" class="w-full h-12 pl-11 pr-4
+                                                       rounded-xl
+                                                       border border-slate-200
+                                                       bg-slate-50
+                                                       outline-none
+                                                       focus:border-pink-400
+                                                       focus:ring-2
+                                                       focus:ring-pink-100
+                                                       transition">
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Email -->
+                                    <div>
+
+                                        <label class="block text-sm font-medium
+                                                      text-slate-600 mb-2" data-i18n="email">
+                                            อีเมล
+                                        </label>
+
+                                        <div class="relative">
+
+                                            <i class="fa-regular fa-envelope
+                                                      absolute left-4 top-1/2
+                                                      -translate-y-1/2
+                                                      text-slate-400"></i>
+
+                                            <input type="email" id="profile-email" placeholder="กรอกอีเมลของท่าน" data-i18n-placeholder="placeholder_email" class="w-full h-12 pl-11 pr-4
+                                                       rounded-xl
+                                                       border border-slate-200
+                                                       bg-slate-50
+                                                       outline-none
+                                                       focus:border-pink-400
+                                                       focus:ring-2
+                                                       focus:ring-pink-100
+                                                       transition" readonly>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Position -->
+                                    <div>
+
+                                        <label class="block text-sm font-medium
+                                                      text-slate-600 mb-2" data-i18n="position">
+                                            ตำแหน่ง / สถานภาพ
+                                        </label>
+
+                                        <div class="relative">
+
+                                            <i class="fa-solid fa-briefcase
+                                                      absolute left-4 top-1/2
+                                                      -translate-y-1/2
+                                                      text-slate-400"></i>
+
+                                            <input type="text" id="profile-position" placeholder="กรอกตำแหน่ง" data-i18n-placeholder="placeholder_position" class="w-full h-12 pl-11 pr-4
+                                                       rounded-xl
+                                                       border border-slate-200
+                                                       bg-slate-50
+                                                       outline-none
+                                                       focus:border-pink-400
+                                                       focus:ring-2
+                                                       focus:ring-pink-100
+                                                       transition">
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Department -->
+                                    <div>
+
+                                        <label class="block text-sm font-medium
+                                                      text-slate-600 mb-2" data-i18n="department">
+                                            สาขาวิชา / คณะ
+                                        </label>
+
+                                        <div class="relative">
+
+                                            <i class="fa-solid fa-building
+                                                      absolute left-4 top-1/2
+                                                      -translate-y-1/2
+                                                      text-slate-400"></i>
+
+                                            <input type="text" id="profile-department" placeholder="ข้อมูลสาขา/คณะ" data-i18n-placeholder="placeholder_department" class="w-full h-12 pl-11 pr-4
+                                                       rounded-xl
+                                                       border border-slate-200
+                                                       bg-slate-50
+                                                       outline-none
+                                                       focus:border-pink-400
+                                                       focus:ring-2
+                                                       focus:ring-pink-100
+                                                       transition">
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <!-- Phone -->
+                                    <div>
+
+                                        <label class="block text-sm font-medium
+                                                      text-slate-600 mb-2" data-i18n="phone">
+                                            เบอร์โทรศัพท์
+                                        </label>
+
+                                        <div class="relative">
+
+                                            <i class="fa-solid fa-phone
+                                                      absolute left-4 top-1/2
+                                                      -translate-y-1/2
+                                                      text-slate-400"></i>
+
+                                            <input type="tel" id="profile-phone" placeholder="กรอกเบอร์โทรศัพท์ของท่าน" data-i18n-placeholder="placeholder_phone" class="w-full h-12 pl-11 pr-4
+                                                       rounded-xl
+                                                       border border-slate-200
+                                                       bg-slate-50
+                                                       outline-none
+                                                       focus:border-pink-400
+                                                       focus:ring-2
+                                                       focus:ring-pink-100
+                                                       transition">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- Bio -->
+                                <div class="mt-6">
+
+                                    <label class="block text-sm font-medium
+                                                  text-slate-600 mb-2" data-i18n="bio">
+                                        เกี่ยวกับฉัน / คำแนะนำตัว
+                                    </label>
+
+                                    <textarea id="profile-bio" rows="4" placeholder="แนะนำตัวเองสั้นๆ..." data-i18n-placeholder="placeholder_bio" class="w-full p-4 rounded-xl
+                                               border border-slate-200
+                                               bg-slate-50
+                                               outline-none resize-none
+                                               focus:border-pink-400
+                                               focus:ring-2
+                                               focus:ring-pink-100
+                                               transition"></textarea>
+
+                                </div>
+
+
+                                <!-- Buttons -->
+                                <div class="flex flex-col sm:flex-row
+                                            justify-end gap-3 mt-7">
+
+                                    <button type="button" id="btn-cancel-profile" class="px-6 py-2.5 rounded-xl
+                                               border border-slate-200
+                                               text-slate-600
+                                               hover:bg-slate-50
+                                               transition" data-i18n="cancel">
+
+                                        ยกเลิก
+
+                                    </button>
+
+
+                                    <button type="button" id="btn-save-profile" class="px-6 py-2.5 rounded-xl
+                                               bg-pink-500 text-white
+                                               shadow-md shadow-pink-200
+                                               hover:bg-pink-600
+                                               hover:-translate-y-0.5
+                                               transition">
+
+                                        <i class="fa-solid fa-check mr-2"></i>
+                                        <span data-i18n="save_data">บันทึกข้อมูล</span>
+
+                                    </button>
+
+                                </div>
+
+                                <p id="profile-status-msg" class="hidden mt-4 p-3 rounded-xl text-sm text-center font-medium"></p>
+
+                            </div>
+
+                        </div>
+
+                        <!-- =============================== -->
+                        <!-- Teams / Settings -->
+                        <!-- =============================== -->
+                        <div class="bg-white rounded-2xl
+                                    border border-slate-100
+                                    shadow-[0_4px_20px_rgba(0,0,0,0.04)]
+                                    p-6 md:p-8">
+
+                            <h2 class="text-lg font-semibold text-slate-800 mb-6" data-i18n="additional_settings">
+                                ตั้งค่าเพิ่มเติม
+                            </h2>
+
+                            <form class="space-y-4 max-w-xl" onsubmit="return false;">
+
+                                <!-- รหัสผ่านเดิม -->
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-600 mb-2" data-i18n="old_password">
+                                        รหัสผ่านเดิม
+                                    </label>
+                                    <div class="relative">
+                                        <i
+                                            class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                        <input type="password" id="oldPassword" placeholder="กรอกรหัสผ่านเดิม" data-i18n-placeholder="placeholder_old_password"
+                                            class="w-full h-12 pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition">
+                                        <button type="button"
+                                            onclick="togglePasswordVisibility('oldPassword', 'oldPasswordIcon')"
+                                            aria-label="แสดง/ซ่อนรหัสผ่าน"
+                                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-pink-500 transition">
+                                            <i id="oldPasswordIcon" class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- รหัสผ่านใหม่ -->
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-600 mb-2" data-i18n="new_password">
+                                        รหัสผ่านใหม่
+                                    </label>
+                                    <div class="relative">
+                                        <i
+                                            class="fa-solid fa-key absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                        <input type="password" id="newPassword" placeholder="กรอกรหัสผ่านใหม่" data-i18n-placeholder="placeholder_new_password"
+                                            class="w-full h-12 pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition">
+                                        <button type="button"
+                                            onclick="togglePasswordVisibility('newPassword', 'newPasswordIcon')"
+                                            aria-label="แสดง/ซ่อนรหัสผ่าน"
+                                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-pink-500 transition">
+                                            <i id="newPasswordIcon" class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- ยืนยันรหัสผ่านใหม่ -->
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-600 mb-2" data-i18n="confirm_password">
+                                        ยืนยันรหัสผ่านใหม่
+                                    </label>
+                                    <div class="relative">
+                                        <i
+                                            class="fa-solid fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                        <input type="password" id="confirmPassword" placeholder="ยืนยันรหัสผ่านใหม่" data-i18n-placeholder="placeholder_confirm_password"
+                                            class="w-full h-12 pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition">
+                                        <button type="button"
+                                            onclick="togglePasswordVisibility('confirmPassword', 'confirmPasswordIcon')"
+                                            aria-label="แสดง/ซ่อนรหัสผ่าน"
+                                            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-pink-500 transition">
+                                            <i id="confirmPasswordIcon" class="fa-solid fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="pt-3">
+                                    <button type="submit"
+                                        class="px-6 py-2.5 rounded-xl bg-pink-500 text-white shadow-md shadow-pink-200 hover:bg-pink-600 hover:-translate-y-0.5 transition">
+                                        <i class="fa-solid fa-check mr-2"></i>
+                                        <span data-i18n="save_password">แก้ไขรหัสผ่าน</span>
+                                    </button>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+    <script src="setting.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            let currentUser = null;
+            const rawUser = localStorage.getItem('currentUser');
+            if (rawUser) {
+                try { currentUser = JSON.parse(rawUser); } catch(e) {}
+            }
+
+            // Elements
+            const avatarLarge = document.getElementById('profile-avatar-large');
+            const headingName = document.getElementById('profile-heading-name');
+            const headingRole = document.getElementById('profile-heading-role');
+            const headingId = document.getElementById('profile-heading-id');
+
+            const firstNameInput = document.getElementById('profile-first-name');
+            const lastNameInput = document.getElementById('profile-last-name');
+            const emailInput = document.getElementById('profile-email');
+            const positionInput = document.getElementById('profile-position');
+            const departmentInput = document.getElementById('profile-department');
+            const phoneInput = document.getElementById('profile-phone');
+            const bioInput = document.getElementById('profile-bio');
+            const btnSave = document.getElementById('btn-save-profile');
+            const statusMsg = document.getElementById('profile-status-msg');
+
+            // Populate from currentUser or fetch from /api/user
+            function populateUI(user) {
+                if (!user) return;
+                const fullName = user.fullName || user.name || '';
+                const parts = fullName.split(' ');
+                const fName = parts[0] || '';
+                const lName = parts.slice(1).join(' ') || '';
+
+                if (avatarLarge) avatarLarge.textContent = user.avatar || (fName ? fName[0].toUpperCase() : 'U');
+                if (headingName) headingName.textContent = fullName || 'โปรไฟล์ผู้ใช้';
+                if (headingRole) headingRole.textContent = user.role || 'นักศึกษา';
+                if (headingId) headingId.textContent = user.studentId ? `รหัสนักศึกษา: ${user.studentId}` : '';
+
+                if (firstNameInput) firstNameInput.value = fName;
+                if (lastNameInput) lastNameInput.value = lName;
+                if (emailInput) emailInput.value = user.email || '';
+                if (positionInput) positionInput.value = user.role || 'นักศึกษา';
+                if (departmentInput) departmentInput.value = user.faculty || user.department || 'คณะวิทยาศาสตร์และเทคโนโลยี';
+                if (phoneInput) phoneInput.value = user.phone || '';
+                if (bioInput) bioInput.value = user.bio || '';
+            }
+
+            if (currentUser) {
+                populateUI(currentUser);
+            } else {
+                try {
+                    const res = await fetch('/api/user');
+                    const defaultUser = await res.json();
+                    populateUI(defaultUser);
+                } catch(e) {
+                    console.log('Notice: using offline profile defaults');
+                }
+            }
+
+            // Save profile changes
+            if (btnSave) {
+                btnSave.addEventListener('click', async () => {
+                    const fName = firstNameInput.value.trim();
+                    const lName = lastNameInput.value.trim();
+                    const updatedFullName = `${fName} ${lName}`.trim();
+                    const updatedFaculty = departmentInput.value.trim();
+                    const updatedPhone = phoneInput.value.trim();
+                    const updatedBio = bioInput.value.trim();
+
+                    btnSave.disabled = true;
+                    btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังบันทึก...';
+
+                    try {
+                        const targetId = currentUser ? currentUser.id : null;
+                        const targetStudentId = currentUser ? currentUser.studentId : (headingId.textContent.replace(/\D/g, '') || '67122201001');
+
+                        const res = await fetch('/api/user/profile', {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                id: targetId,
+                                studentId: targetStudentId,
+                                fullName: updatedFullName,
+                                faculty: updatedFaculty,
+                                phone: updatedPhone,
+                                bio: updatedBio
+                            })
+                        });
+
+                        const data = await res.json();
+                        if (res.ok && data.success) {
+                            if (currentUser && data.user) {
+                                currentUser = { ...currentUser, ...data.user };
+                                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                            }
+                            populateUI(currentUser || { fullName: updatedFullName, studentId: targetStudentId, faculty: updatedFaculty });
+
+                            statusMsg.className = "mt-4 p-3 rounded-xl text-sm text-center font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 block";
+                            statusMsg.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> บันทึกข้อมูลโปรไฟล์เรียบร้อยแล้ว!';
+                        } else {
+                            statusMsg.className = "mt-4 p-3 rounded-xl text-sm text-center font-medium bg-rose-50 text-rose-700 border border-rose-200 block";
+                            statusMsg.textContent = data.error || 'เกิดข้อผิดพลาดในการบันทึกข้อมูล';
+                        }
+                    } catch(err) {
+                        statusMsg.className = "mt-4 p-3 rounded-xl text-sm text-center font-medium bg-rose-50 text-rose-700 border border-rose-200 block";
+                        statusMsg.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
+                    } finally {
+                        btnSave.disabled = false;
+                        btnSave.innerHTML = '<i class="fa-solid fa-check mr-2"></i> <span data-i18n="save_data">บันทึกข้อมูล</span>';
+                        setTimeout(() => { statusMsg.classList.add('hidden'); }, 3000);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+
+</html>

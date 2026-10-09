@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSRU Chatbot - มหาวิทยาลัยราชภัฏสวนสุนันทา</title>
+
+  <!-- Google Fonts: Prompt & Kanit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&family=Prompt:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="public/css/style.css">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Configuration อิงจากตัวแปร CSS ของคุณ -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Prompt', 'Kanit', 'sans-serif'],
+          },
+          colors: {
+            sidebar: {
+              bg: '#0B132B',
+              hover: '#162244',
+              active: '#1C2B54',
+              text: '#FFFFFF',
+              title: '#94A3B8'
+            },
+            primary: {
+              pink: '#FF4B8B',
+              hover: '#E83B79',
+            },
+            chat: {
+              userBg: '#F78DA7',
+              mainBg: '#F8FAFC',
+            }
+          },
+          animation: {
+            'typing': 'typingBounce 1.4s infinite ease-in-out both',
+            'fade-in': 'fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+          },
+          keyframes: {
+            typingBounce: {
+              '0%, 80%, 100%': { transform: 'scale(0.6)', opacity: '0.5' },
+              '40%': { transform: 'scale(1)', opacity: '1' },
+            },
+            fadeIn: {
+              'from': { opacity: '0', transform: 'translateY(8px)' },
+              'to': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- จัดการ Scrollbar ที่ Tailwind CDN ไม่รองรับโดยตรง -->
+  <style>
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(203, 213, 225, 1);
+      border-radius: 4px;
+    }
+
+    .sidebar-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+
+    /* Global Dark Mode Smooth Transition */
+    body {
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+  </style>
+  <script>
+    if (localStorage.getItem("darkMode") === "true") {
+      document.documentElement.classList.add("dark");
+    }
+  </script>
+</head>
+
+<body class="chat-app-page bg-chat-mainBg text-slate-800 font-sans h-screen overflow-hidden flex antialiased">
+
+  <!-- Sidebar -->
+  <aside
+    class="w-[280px] bg-sidebar-bg flex-col h-full flex-shrink-0 z-[100] border-r border-white/5 transition-transform duration-300 hidden md:flex"
+    id="sidebar">
+    <div class="px-5 pt-6 pb-4">
+      <a href="index.html" class="flex items-center gap-3 group hover:opacity-90 transition-opacity">
+        <div class="w-8 h-8 rounded-full text-primary-pink flex items-center justify-center text-lg">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <span class="text-lg font-semibold text-white tracking-[0.3px]">SSRU Chatbot</span>
+      </a>
+    </div>
+
+    <!-- New Chat Button -->
+    <div class="px-4 pb-4">
+      <button
+        class="w-full py-3 px-5 bg-gradient-to-br from-[#FF4B8B] to-[#F43F5E] text-white rounded-full font-medium flex items-center justify-center gap-2.5 shadow-[0_4px_14px_rgba(255,75,139,0.35)] hover:-translate-y-[1px] hover:shadow-[0_6px_20px_rgba(255,75,139,0.5)] active:translate-y-0 transition-all duration-200"
+        id="btn-new-chat">
+        <i class="fa-solid fa-plus"></i>
+        <span data-i18n="new_chat">การสนทนาใหม่</span>
+      </button>
+    </div>
+
+    <!-- Chat History Section -->
+    <div class="flex-1 overflow-y-auto px-3 py-3 flex flex-col sidebar-scrollbar">
+      <div class="flex items-center justify-between px-3 mb-1">
+        <span class="text-[11px] font-semibold text-sidebar-title tracking-[0.8px]" data-i18n="chat_history">ประวัติการสนทนา</span>
+        <button id="btn-clear-all-chats" title="ล้างทั้งหมด" data-i18n-title="clear_all"
+          class="text-[11px] text-slate-400 hover:text-rose-400 transition-colors flex items-center gap-1 cursor-pointer">
+          <i class="fa-solid fa-trash-can text-[10px]"></i>
+          <span data-i18n="clear_all">ล้างทั้งหมด</span>
+        </button>
+      </div>
+      <ul class="flex flex-col gap-1 list-none" id="history-list">
+      </ul>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="p-4 border-t border-white/10 flex items-center justify-between bg-black/15">
+      <a href="user.html" class="flex items-center gap-3 overflow-hidden hover:opacity-85 transition-opacity"
+        title="ดูโปรไฟล์" data-i18n-title="view_profile">
+        <div
+          id="sidebar-user-avatar"
+          class="w-9 h-9 rounded-full bg-primary-pink text-white flex items-center justify-center font-semibold text-[15px] flex-shrink-0">
+          R
+        </div>
+        <div class="flex flex-col overflow-hidden">
+          <span id="sidebar-user-name" class="text-[13px] font-medium text-white whitespace-nowrap overflow-hidden text-ellipsis">Rattanawut Kerdloet</span>
+          <span id="sidebar-user-id" class="text-[11px] text-sidebar-title whitespace-nowrap overflow-hidden text-ellipsis">ID: 67122201001</span>
+        </div>
+      </a>
+      <div class="flex items-center gap-1">
+        <a href="settings.html"
+          class="text-slate-400 hover:text-white hover:bg-white/10 text-base cursor-pointer p-2 rounded-md transition-colors flex items-center justify-center"
+          title="ตั้งค่า" data-i18n-title="settings" id="btn-settings">
+          <i class="fa-solid fa-gear"></i>
+        </a>
+        <a href="login.html"
+          class="text-slate-400 hover:text-white hover:bg-white/10 text-base cursor-pointer p-2 rounded-md transition-colors flex items-center justify-center"
+          title="ออกจากระบบ" data-i18n-title="logout" id="btn-logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Overlay for mobile sidebar toggle -->
+  <div class="fixed inset-0 bg-slate-900/50 backdrop-blur-[2px] z-90 hidden" id="sidebar-overlay"></div>
+
+  <!-- Main Chat Content -->
+  <main class="flex-1 flex flex-col h-full bg-chat-mainBg relative overflow-hidden">
+
+    <!-- Top Header -->
+    <header
+      class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div class="flex items-center gap-3.5">
+        <button class="md:hidden text-lg text-slate-600 cursor-pointer p-1.5 bg-transparent border-none"
+          id="mobile-toggle">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="w-[38px] h-[38px] rounded-full bg-sidebar-bg text-white flex items-center justify-center text-lg">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="flex flex-col">
+          <h1 class="text-base font-semibold text-slate-900 leading-[1.2]">SSRU Chatbot</h1>
+          <p class="text-xs text-slate-500 font-normal" data-i18n="university_sub">Suan Sunandha Rajabhat University</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 md:gap-3">
+        <div
+          class="status-indicator flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-transparent dark:border-slate-700 px-2.5 py-1 rounded-[14px]">
+          <span
+            class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_0_2px_rgba(16,185,129,0.2)] animate-pulse"></span>
+          <span data-i18n="status_online">ออนไลน์</span>
+        </div>
+        <button
+          class="text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-300 text-[15px] cursor-pointer p-2 rounded-full transition-colors flex items-center justify-center"
+          id="btn-clear-chat" title="ล้างการสนทนา" data-i18n-title="btn_clear_chat">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+        <a href="settings.html"
+          class="text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-300 text-[15px] cursor-pointer p-2 rounded-full transition-colors flex items-center justify-center"
+          title="ตั้งค่า" data-i18n-title="settings" id="btn-settings-header">
+          <i class="fa-solid fa-gear"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Chat Messages Scrollable Area -->
+    <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-5 scroll-smooth custom-scrollbar" id="chat-messages">
+    </div>
+
+    <!-- Quick Prompt Suggestions -->
+    <div class="px-6 pb-3 w-full max-w-[900px] mx-auto" id="quick-prompts-container">
+      <div class="text-xs font-medium text-slate-500 dark:text-slate-400 mb-2" data-i18n="suggested_questions">คำถามแนะนำ:</div>
+      <div class="flex gap-2 overflow-x-auto py-1.5 custom-scrollbar">
+        <button
+          class="prompt-chip bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 rounded-[20px] px-3.5 py-2 text-[13px] text-slate-700 dark:text-slate-200 whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-primary-pink hover:bg-pink-50 hover:text-primary-pink hover:-translate-y-[1px]"
+          data-prompt="การลงทะเบียนเรียนภาคเรียนที่ 2" data-prompt-en="Semester 2 Course Registration Schedule & Procedures" data-i18n="prompt_reg">
+          <i class="fa-regular fa-calendar-check text-primary-pink text-xs"></i> การลงทะเบียนเรียนภาคเรียน
+        </button>
+        <button
+          class="prompt-chip bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 rounded-[20px] px-3.5 py-2 text-[13px] text-slate-700 dark:text-slate-200 whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-primary-pink hover:bg-pink-50 hover:text-primary-pink hover:-translate-y-[1px]"
+          data-prompt="ขั้นตอนขอผ่อนผันค่าเทอม" data-prompt-en="Tuition Fee Payment Deferment Procedures" data-i18n="prompt_fee">
+          <i class="fa-regular fa-credit-card text-primary-pink text-xs"></i> ขั้นตอนขอผ่อนผันค่าเทอม
+        </button>
+        <button
+          class="prompt-chip bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 rounded-[20px] px-3.5 py-2 text-[13px] text-slate-700 dark:text-slate-200 whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-primary-pink hover:bg-pink-50 hover:text-primary-pink hover:-translate-y-[1px]"
+          data-prompt="ตารางสอบปลายภาค" data-prompt-en="Final Examination Schedule" data-i18n="prompt_exam">
+          <i class="fa-regular fa-clock text-primary-pink text-xs"></i> ตารางสอบปลายภาค
+        </button>
+        <button
+          class="prompt-chip bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 rounded-[20px] px-3.5 py-2 text-[13px] text-slate-700 dark:text-slate-200 whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-primary-pink hover:bg-pink-50 hover:text-primary-pink hover:-translate-y-[1px]"
+          data-prompt="ทุนการศึกษา ปี 2568" data-prompt-en="Scholarships and Student Loans 2025" data-i18n="prompt_scholarship">
+          <i class="fa-solid fa-award text-primary-pink text-xs"></i> ทุนการศึกษา
+        </button>
+        <button
+          class="prompt-chip bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 rounded-[20px] px-3.5 py-2 text-[13px] text-slate-700 dark:text-slate-200 whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-primary-pink hover:bg-pink-50 hover:text-primary-pink hover:-translate-y-[1px]"
+          data-prompt="แปลภาษา: ฝ่ายทะเบียนและประมวลผลเปิดกี่โมงและตั้งอยู่ที่ไหน" data-prompt-en="Translate: What time is the registrar office open and where is it located?" data-i18n="prompt_translate">
+          <i class="fa-solid fa-language text-primary-pink text-xs"></i> แปลภาษา TH ➔ EN
+        </button>
+      </div>
+    </div>
+
+    <!-- Bottom Input Container -->
+    <div class="px-6 py-3 pb-4 bg-chat-mainBg dark:bg-[#0F172A] flex flex-col items-center gap-2 flex-shrink-0"
+      id="chat-form-container">
+      <form
+        class="w-full max-w-[900px] relative flex items-center bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 rounded-[30px] py-1.5 pl-5 pr-2 shadow-[0_4px_12px_rgba(0,0,0,0.03)] transition-all duration-200 focus-within:border-primary-pink focus-within:shadow-[0_4px_16px_rgba(255,75,139,0.15)]"
+        id="chat-form">
+        <input type="text" id="user-input"
+          class="flex-1 border-none outline-none bg-transparent font-sans text-[15px] text-slate-800 dark:text-white py-2 placeholder-slate-400 dark:placeholder-slate-400"
+          placeholder="พิมพ์ข้อความของคุณที่นี่..." data-i18n-placeholder="input_placeholder" autocomplete="off" />
+        <button type="submit" id="btn-send"
+          class="w-10 h-10 rounded-full bg-slate-400 text-white flex items-center justify-center text-base transition-all duration-200 flex-shrink-0 hover:scale-105 active:scale-95 focus:bg-primary-pink focus:shadow-[0_2px_8px_rgba(255,75,139,0.4)]"
+          title="ส่งข้อความ" data-i18n-title="btn_send">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </form>
+      <div class="text-[11.5px] text-slate-400 dark:text-slate-500 text-center mt-1" data-i18n="disclaimer">
+        SSRU Chatbot อาจแสดงผลข้อมูลคลาดเคลื่อนได้ กรุณาตรวจสอบข้อมูลสำคัญอีกครั้ง
+      </div>
+    </div>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logout-modal"
+      class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+      <div id="logout-modal-card"
+        class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-all duration-300 text-center">
+        <div
+          class="w-14 h-14 bg-pink-50 text-primary-pink rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-pink-100">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-slate-800 mb-1" data-i18n="logout_modal_title">ยืนยันการออกจากระบบ</h3>
+        <p class="text-sm text-slate-500 mb-6" data-i18n="logout_modal_desc">คุณต้องการออกจากระบบ SSRU Chatbot ใช่หรือไม่?</p>
+        <div class="flex items-center gap-3">
+          <button type="button" id="btn-cancel-logout" data-i18n="cancel"
+            class="flex-1 py-2.5 px-4 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors cursor-pointer">
+            ยกเลิก
+          </button>
+          <button type="button" id="btn-confirm-logout" data-i18n="logout"
+            class="flex-1 py-2.5 px-4 bg-primary-pink text-white rounded-xl text-sm font-medium hover:bg-pink-600 transition-colors cursor-pointer shadow-md shadow-pink-200">
+            ออกจากระบบ
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clear All Confirmation Modal -->
+    <div id="clear-all-modal"
+      class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+      <div id="clear-all-modal-card"
+        class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-all duration-300 text-center">
+        <div
+          class="w-14 h-14 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-rose-100">
+          <i class="fa-solid fa-trash-can"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-slate-800 mb-1" data-i18n="confirm_clear_all_title">ยืนยันการล้างแชททั้งหมด</h3>
+        <p class="text-sm text-slate-500 mb-6" data-i18n="confirm_clear_all_desc">คุณต้องการลบประวัติการสนทนาทั้งหมดใช่หรือไม่?
+          (การกระทำนี้ไม่สามารถย้อนกลับได้)</p>
+        <div class="flex items-center gap-3">
+          <button type="button" id="btn-cancel-clear-all" data-i18n="cancel"
+            class="flex-1 py-2.5 px-4 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors cursor-pointer">
+            ยกเลิก
+          </button>
+          <button type="button" id="btn-confirm-clear-all" data-i18n="clear_all"
+            class="flex-1 py-2.5 px-4 bg-rose-500 text-white rounded-xl text-sm font-medium hover:bg-rose-600 transition-colors cursor-pointer shadow-md shadow-rose-200">
+            ล้างทั้งหมด
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="setting.js"></script>
+    <script src="public/js/app.js"></script>
+</body>
+
+</html>
