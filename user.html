@@ -852,7 +852,12 @@
                 if (avatarLarge) avatarLarge.textContent = user.avatar || (fName ? fName[0].toUpperCase() : 'U');
                 if (headingName) headingName.textContent = fullName || 'โปรไฟล์ผู้ใช้';
                 if (headingRole) headingRole.textContent = user.role || 'นักศึกษา';
-                if (headingId) headingId.textContent = user.studentId ? `รหัสนักศึกษา: ${user.studentId}` : '';
+                if (headingId) {
+                    let idTitle = 'รหัสนักศึกษา';
+                    if (user.role === 'อาจารย์') idTitle = 'รหัสอาจารย์';
+                    else if (user.role === 'บุคลากร') idTitle = 'รหัสบุคลากร';
+                    headingId.textContent = user.studentId ? `${idTitle}: ${user.studentId}` : '';
+                }
 
                 if (firstNameInput) firstNameInput.value = fName;
                 if (lastNameInput) lastNameInput.value = lName;
@@ -884,6 +889,7 @@
                     const updatedFaculty = departmentInput.value.trim();
                     const updatedPhone = phoneInput.value.trim();
                     const updatedBio = bioInput.value.trim();
+                    const updatedRole = positionInput.value.trim();
 
                     btnSave.disabled = true;
                     btnSave.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังบันทึก...';
@@ -899,6 +905,7 @@
                                 id: targetId,
                                 studentId: targetStudentId,
                                 fullName: updatedFullName,
+                                role: updatedRole,
                                 faculty: updatedFaculty,
                                 phone: updatedPhone,
                                 bio: updatedBio
