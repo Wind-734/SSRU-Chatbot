@@ -100,8 +100,44 @@
         body.dark .fa-id-card,
         body.dark .fa-envelope,
         body.dark .fa-graduation-cap,
+        body.dark .fa-chalkboard-user,
+        body.dark .fa-user-tie,
         body.dark .fa-lock {
             color: #94A3B8 !important;
+        }
+
+        .role-option-btn {
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        .role-option-btn.selected {
+            border-color: #F45BB0 !important;
+            background-color: #FDF2F8 !important;
+            color: #E5499E !important;
+            box-shadow: 0 0 0 1px #F45BB0, 0 4px 12px rgba(244, 91, 176, 0.15) !important;
+        }
+
+        .role-option-btn.selected i {
+            color: #F45BB0 !important;
+        }
+
+        body.dark .role-option-btn {
+            border-color: #334155 !important;
+            background-color: #0F172A !important;
+            color: #94A3B8 !important;
+        }
+
+        body.dark .role-option-btn.selected {
+            border-color: #F45BB0 !important;
+            background-color: rgba(244, 91, 176, 0.15) !important;
+            color: #F45BB0 !important;
+            box-shadow: 0 0 0 1px #F45BB0, 0 4px 14px rgba(244, 91, 176, 0.25) !important;
+        }
+
+        body.dark .role-option-btn.selected i {
+            color: #F45BB0 !important;
         }
     </style>
     <script>
@@ -147,6 +183,58 @@
             <!-- แบบฟอร์มสมัครสมาชิก -->
             <form id="registerForm" class="space-y-4">
 
+                <!-- บทบาทผู้ใช้งาน (นักศึกษา / อาจารย์ / บุคลากร) -->
+                <div>
+                    <label class="mb-2 block text-sm font-medium" data-i18n="role_label">
+                        บทบาทผู้ใช้งาน
+                    </label>
+
+                    <div class="grid grid-cols-3 gap-2 sm:gap-2.5" role="radiogroup" aria-label="เลือกบทบาทผู้ใช้งาน">
+                        <!-- ตัวเลือกนักศึกษา -->
+                        <label
+                            id="roleStudentOption"
+                            class="role-option-btn selected flex cursor-pointer items-center justify-center gap-1.5 sm:gap-2 rounded-xl border-2 border-slate-200 bg-white p-2.5 sm:p-3 text-xs sm:text-sm font-medium text-slate-700">
+                            <input
+                                type="radio"
+                                name="role"
+                                id="roleStudent"
+                                value="นักศึกษา"
+                                checked
+                                class="sr-only">
+                            <i class="fa-solid fa-graduation-cap text-sm sm:text-base"></i>
+                            <span data-i18n="role_student" class="truncate">นักศึกษา</span>
+                        </label>
+
+                        <!-- ตัวเลือกอาจารย์ -->
+                        <label
+                            id="roleTeacherOption"
+                            class="role-option-btn flex cursor-pointer items-center justify-center gap-1.5 sm:gap-2 rounded-xl border-2 border-slate-200 bg-white p-2.5 sm:p-3 text-xs sm:text-sm font-medium text-slate-700">
+                            <input
+                                type="radio"
+                                name="role"
+                                id="roleTeacher"
+                                value="อาจารย์"
+                                class="sr-only">
+                            <i class="fa-solid fa-chalkboard-user text-sm sm:text-base"></i>
+                            <span data-i18n="role_teacher" class="truncate">อาจารย์</span>
+                        </label>
+
+                        <!-- ตัวเลือกบุคลากร -->
+                        <label
+                            id="roleStaffOption"
+                            class="role-option-btn flex cursor-pointer items-center justify-center gap-1.5 sm:gap-2 rounded-xl border-2 border-slate-200 bg-white p-2.5 sm:p-3 text-xs sm:text-sm font-medium text-slate-700">
+                            <input
+                                type="radio"
+                                name="role"
+                                id="roleStaff"
+                                value="บุคลากร"
+                                class="sr-only">
+                            <i class="fa-solid fa-user-tie text-sm sm:text-base"></i>
+                            <span data-i18n="role_staff" class="truncate">บุคลากร</span>
+                        </label>
+                    </div>
+                </div>
+
                 <!-- ชื่อและนามสกุล -->
                 <div>
                     <label for="fullName" class="mb-2 block text-sm font-medium" data-i18n="full_name">
@@ -164,9 +252,9 @@
                         class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
                 </div>
 
-                <!-- รหัสนักศึกษา -->
+                <!-- รหัสนักศึกษา / รหัสอาจารย์ -->
                 <div>
-                    <label for="studentId" class="mb-2 block text-sm font-medium" data-i18n="student_id">
+                    <label id="idNumberLabel" for="studentId" class="mb-2 block text-sm font-medium" data-i18n="student_id">
                         รหัสนักศึกษา
                     </label>
 
@@ -296,6 +384,97 @@
         const password = document.getElementById("password");
         const confirmPassword = document.getElementById("confirmPassword");
         const formMessage = document.getElementById("formMessage");
+        const roleRadios = document.querySelectorAll('input[name="role"]');
+        const roleStudentOption = document.getElementById('roleStudentOption');
+        const roleTeacherOption = document.getElementById('roleTeacherOption');
+        const roleStaffOption = document.getElementById('roleStaffOption');
+        const idNumberLabel = document.getElementById('idNumberLabel');
+        const studentIdInput = document.getElementById('studentId');
+        const emailInput = document.getElementById('email');
+
+        // สลับบทบาท (นักศึกษา vs อาจารย์ vs บุคลากร)
+        function updateRoleSelection(role) {
+            const currentLang = localStorage.getItem('site_lang') || 'th';
+
+            // เคลียร์ class selected ของทุกตัวเลือกก่อน
+            roleStudentOption?.classList.remove('selected');
+            roleTeacherOption?.classList.remove('selected');
+            roleStaffOption?.classList.remove('selected');
+
+            if (role === 'อาจารย์') {
+                roleTeacherOption?.classList.add('selected');
+
+                if (idNumberLabel) {
+                    idNumberLabel.setAttribute('data-i18n', 'teacher_id');
+                    idNumberLabel.textContent = currentLang === 'en' ? 'Teacher ID' : 'รหัสอาจารย์';
+                }
+
+                if (studentIdInput) {
+                    studentIdInput.setAttribute('data-i18n-placeholder', 'placeholder_teacher_id');
+                    studentIdInput.placeholder = currentLang === 'en' ? 'Enter teacher ID' : 'กรอกรหัสอาจารย์';
+                    studentIdInput.inputMode = 'text';
+                    studentIdInput.pattern = '[A-Za-z0-9]+';
+                    studentIdInput.title = currentLang === 'en' ? 'Letters and numbers allowed' : 'กรอกรหัสอาจารย์เป็นตัวอักษรหรือตัวเลข';
+                }
+
+                if (emailInput) {
+                    emailInput.setAttribute('data-i18n-placeholder', 'placeholder_teacher_email');
+                    emailInput.placeholder = currentLang === 'en' ? 'e.g. teacher@ssru.ac.th' : 'เช่น teacher@ssru.ac.th';
+                }
+            } else if (role === 'บุคลากร') {
+                roleStaffOption?.classList.add('selected');
+
+                if (idNumberLabel) {
+                    idNumberLabel.setAttribute('data-i18n', 'staff_id');
+                    idNumberLabel.textContent = currentLang === 'en' ? 'Staff ID' : 'รหัสบุคลากร';
+                }
+
+                if (studentIdInput) {
+                    studentIdInput.setAttribute('data-i18n-placeholder', 'placeholder_staff_id');
+                    studentIdInput.placeholder = currentLang === 'en' ? 'Enter staff ID' : 'กรอกรหัสบุคลากร';
+                    studentIdInput.inputMode = 'text';
+                    studentIdInput.pattern = '[A-Za-z0-9]+';
+                    studentIdInput.title = currentLang === 'en' ? 'Letters and numbers allowed' : 'กรอกรหัสบุคลากรเป็นตัวอักษรหรือตัวเลข';
+                }
+
+                if (emailInput) {
+                    emailInput.setAttribute('data-i18n-placeholder', 'placeholder_staff_email');
+                    emailInput.placeholder = currentLang === 'en' ? 'e.g. staff@ssru.ac.th' : 'เช่น staff@ssru.ac.th';
+                }
+            } else {
+                roleStudentOption?.classList.add('selected');
+
+                if (idNumberLabel) {
+                    idNumberLabel.setAttribute('data-i18n', 'student_id');
+                    idNumberLabel.textContent = currentLang === 'en' ? 'Student ID' : 'รหัสนักศึกษา';
+                }
+
+                if (studentIdInput) {
+                    studentIdInput.setAttribute('data-i18n-placeholder', 'placeholder_student_id');
+                    studentIdInput.placeholder = currentLang === 'en' ? 'Enter student ID' : 'กรอกรหัสนักศึกษา';
+                    studentIdInput.inputMode = 'numeric';
+                    studentIdInput.pattern = '[0-9]+';
+                    studentIdInput.title = currentLang === 'en' ? 'Numbers only' : 'กรอกรหัสนักศึกษาเป็นตัวเลขเท่านั้น';
+                }
+
+                if (emailInput) {
+                    emailInput.setAttribute('data-i18n-placeholder', 'placeholder_reg_email');
+                    emailInput.placeholder = currentLang === 'en' ? 'e.g. student@ssru.ac.th' : 'เช่น student@ssru.ac.th';
+                }
+            }
+        }
+
+        roleRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                updateRoleSelection(radio.value);
+            });
+        });
+
+        // อัปเดตข้อความเมื่อมีการเปลี่ยนภาษา
+        window.addEventListener('languageChange', () => {
+            const currentRole = document.querySelector('input[name="role"]:checked')?.value || 'นักศึกษา';
+            updateRoleSelection(currentRole);
+        });
 
         // เปิด–ปิดการแสดงรหัสผ่าน
         document.querySelectorAll("[data-password-toggle]").forEach((button) => {
@@ -347,6 +526,7 @@
                 return;
             }
 
+            const selectedRole = document.querySelector('input[name="role"]:checked')?.value || 'นักศึกษา';
             const fullName = document.getElementById("fullName").value.trim();
             const studentId = document.getElementById("studentId").value.trim();
             const email = document.getElementById("email").value.trim();
@@ -368,7 +548,8 @@
                         fullName,
                         studentId,
                         email,
-                        password: passwordVal
+                        password: passwordVal,
+                        role: selectedRole
                     })
                 });
 
@@ -376,9 +557,9 @@
 
                 if (response.ok && data.success) {
                     formMessage.className = "rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 p-3 text-sm leading-relaxed font-medium";
-                    formMessage.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> สมัครสมาชิกสำเร็จเรียบร้อยแล้ว! กำลังนำคุณไปหน้าเข้าสู่ระบบ...';
+                    formMessage.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> สมัครสมาชิกในบทบาท "${selectedRole}" สำเร็จเรียบร้อยแล้ว! กำลังนำคุณไปหน้าเข้าสู่ระบบ...`;
                     
-                    // บันทึกรหัสนักศึกษาไว้ให้ล่วงหน้าเพื่อให้หน้า login กรอกให้อัตโนมัติ
+                    // บันทึกรหัสนักศึกษา/อาจารย์ไว้ให้ล่วงหน้าเพื่อให้หน้า login กรอกให้อัตโนมัติ
                     localStorage.setItem('recentLoginIdentifier', studentId);
                     
                     setTimeout(() => {
