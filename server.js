@@ -83,7 +83,7 @@ if (process.env.GEMINI_API_KEY) {
 // Register Endpoint
 app.post('/api/auth/register', async (req, res) => {
   try {
-    const { fullName, studentId, email, password } = req.body;
+    const { fullName, studentId, email, password, role } = req.body;
 
     if (!fullName || !studentId || !email || !password) {
       return res.status(400).json({ error: 'กรุณากรอกข้อมูลให้ครบถ้วนทุกช่อง' });
@@ -93,6 +93,11 @@ app.post('/api/auth/register', async (req, res) => {
     const cleanStudentId = String(studentId).trim();
     const cleanEmail = String(email).trim().toLowerCase();
     const cleanPassword = String(password);
+    const validRoles = ['นักศึกษา', 'อาจารย์', 'บุคลากร'];
+    const cleanRole = (role && validRoles.includes(String(role).trim())) ? String(role).trim() : 'นักศึกษา';
+    let idLabel = 'รหัสนักศึกษา';
+    if (cleanRole === 'อาจารย์') idLabel = 'รหัสอาจารย์';
+    else if (cleanRole === 'บุคลากร') idLabel = 'รหัสบุคลากร';
 
     if (cleanPassword.length < 6) {
       return res.status(400).json({ error: 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร' });
@@ -107,13 +112,13 @@ app.post('/api/auth/register', async (req, res) => {
 
       const existingStudent = await usersCollection.findOne({ studentId: cleanStudentId });
       if (existingStudent) {
-        return res.status(400).json({ error: 'รหัสนักศึกษานี้ถูกลงทะเบียนไว้แล้ว' });
+        return res.status(400).json({ error: `${idLabel}นี้ถูกลงทะเบียนไว้แล้ว` });
       }
     } else {
       const existing = inMemoryUsers.find(u => u.email === cleanEmail || u.studentId === cleanStudentId);
       if (existing) {
         return res.status(400).json({
-          error: existing.email === cleanEmail ? 'อีเมลนี้ถูกใช้งานในระบบแล้ว' : 'รหัสนักศึกษานี้ถูกลงทะเบียนไว้แล้ว'
+          error: existing.email === cleanEmail ? 'อีเมลนี้ถูกใช้งานในระบบแล้ว' : `${idLabel}นี้ถูกลงทะเบียนไว้แล้ว`
         });
       }
     }
@@ -125,9 +130,11 @@ app.post('/api/auth/register', async (req, res) => {
       email: cleanEmail,
       passwordHash: hash,
       salt: salt,
-      role: 'นักศึกษา',
+      role: cleanRole,
       faculty: 'คณะวิทยาศาสตร์และเทคโนโลยี',
-      major: 'วิทยาการคอมพิวเตอร์',
+      major: cleanRole === 'อาจารย์' 
+        ? 'อาจารย์ประจำสาขาวิทยาการคอมพิวเตอร์' 
+        : (cleanRole === 'บุคลากร' ? 'บุคลากร / เจ้าหน้าที่' : 'วิทยาการคอมพิวเตอร์'),
       phone: '',
       bio: '',
       createdAt: new Date(),
@@ -144,7 +151,7 @@ app.post('/api/auth/register', async (req, res) => {
       inMemoryUsers.push(newUser);
     }
 
-    console.log(`👤 New user registered: ${cleanFullName} (${cleanStudentId})`);
+    console.log(`👤 New user registered: ${cleanFullName} (${cleanStudentId}) [บทบาท: ${cleanRole}]`);
 
     res.status(201).json({
       success: true,
@@ -275,7 +282,7 @@ app.get('/api/user', async (req, res) => {
 // Update Profile Endpoint
 app.put('/api/user/profile', async (req, res) => {
   try {
-    const { id, studentId, fullName, faculty, major, phone, bio } = req.body;
+    const { id, studentId, fullName, faculty, major, phone, bio, role } = req.body;
     if (!id && !studentId) {
       return res.status(400).json({ error: 'ไม่พบข้อมูลระบุตัวตนของผู้ใช้' });
     }
@@ -288,6 +295,9 @@ app.put('/api/user/profile', async (req, res) => {
     if (major) updateFields.major = major.trim();
     if (phone !== undefined) updateFields.phone = phone.trim();
     if (bio !== undefined) updateFields.bio = bio.trim();
+    if (role && (role === 'นักศึกษา' || role === 'อาจารย์' || role === 'บุคลากร')) {
+      updateFields.role = role.trim();
+    }
 
     if (usersCollection) {
       let query = {};
@@ -315,6 +325,27 @@ app.put('/api/user/profile', async (req, res) => {
             phone: updatedUser.phone || '',
             bio: updatedUser.bio || '',
             avatar: (updatedUser.fullName || 'U').charAt(0).toUpperCase()
+          }
+        });
+      }
+    } else {
+      const memUser = inMemoryUsers.find(u => (id && u._id === id) || (studentId && u.studentId === studentId));
+      if (memUser) {
+        Object.assign(memUser, updateFields);
+        return res.json({
+          success: true,
+          message: 'บันทึกข้อมูลโปรไฟล์สำเร็จ',
+          user: {
+            id: memUser._id,
+            fullName: memUser.fullName,
+            studentId: memUser.studentId,
+            email: memUser.email,
+            role: memUser.role || 'นักศึกษา',
+            faculty: memUser.faculty || '',
+            major: memUser.major || '',
+            phone: memUser.phone || '',
+            bio: memUser.bio || '',
+            avatar: (memUser.fullName || 'U').charAt(0).toUpperCase()
           }
         });
       }
