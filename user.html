@@ -368,7 +368,8 @@
             </div>
 
             <!-- Back Button : Right -->
-            <a href="index.html" class="back-btn flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200">
+            <a href="index.html"
+                class="back-btn flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200">
                 <span class="text-sm" data-i18n="back_to_main">กลับหน้าหลัก</span>
                 <i class="fa-solid fa-arrow-right text-base"></i>
             </a>
@@ -401,8 +402,7 @@
                                             via-pink-400 to-orange-300
                                             p-[5px]">
 
-                                    <div
-                                        id="profile-avatar-large"
+                                    <div id="profile-avatar-large"
                                         class="w-full h-full rounded-full bg-primary-pink text-white flex items-center justify-center font-bold text-5xl border-4 border-white shadow-inner">
                                         R
                                     </div>
@@ -432,11 +432,12 @@
                         <!-- Name -->
                         <div class="text-center">
 
-                            <h1 id="profile-heading-name" class="text-2xl font-semibold text-slate-800" data-i18n="profile_heading">
+                            <h1 id="profile-heading-name" class="text-2xl font-semibold text-slate-800"
+                                data-i18n="profile_heading">
                                 ชื่อโปรไฟล์
                             </h1>
 
-                            <p id="profile-heading-role" class="text-sm text-slate-500 mt-1" data-i18n="profile_role">
+                            <p id="profile-heading-role" class="text-sm text-slate-500 mt-1">
                                 นักศึกษา
                             </p>
 
@@ -502,7 +503,8 @@
                                                       -translate-y-1/2
                                                       text-slate-400"></i>
 
-                                            <input type="text" id="profile-first-name" placeholder="กรอกชื่อ" data-i18n-placeholder="placeholder_first_name" class="w-full h-12 pl-11 pr-4
+                                            <input type="text" id="profile-first-name" placeholder="กรอกชื่อ"
+                                                data-i18n-placeholder="placeholder_first_name" class="w-full h-12 pl-11 pr-4
                                                        rounded-xl
                                                        border border-slate-200
                                                        bg-slate-50
@@ -532,7 +534,8 @@
                                                       -translate-y-1/2
                                                       text-slate-400"></i>
 
-                                            <input type="text" id="profile-last-name" placeholder="กรอกนามสกุล" data-i18n-placeholder="placeholder_last_name" class="w-full h-12 pl-11 pr-4
+                                            <input type="text" id="profile-last-name" placeholder="กรอกนามสกุล"
+                                                data-i18n-placeholder="placeholder_last_name" class="w-full h-12 pl-11 pr-4
                                                        rounded-xl
                                                        border border-slate-200
                                                        bg-slate-50
@@ -562,7 +565,8 @@
                                                       -translate-y-1/2
                                                       text-slate-400"></i>
 
-                                            <input type="email" id="profile-email" placeholder="กรอกอีเมลของท่าน" data-i18n-placeholder="placeholder_email" class="w-full h-12 pl-11 pr-4
+                                            <input type="email" id="profile-email" placeholder="กรอกอีเมลของท่าน"
+                                                data-i18n-placeholder="placeholder_email" class="w-full h-12 pl-11 pr-4
                                                        rounded-xl
                                                        border border-slate-200
                                                        bg-slate-50
@@ -592,7 +596,8 @@
                                                       -translate-y-1/2
                                                       text-slate-400"></i>
 
-                                            <input type="text" id="profile-position" placeholder="กรอกตำแหน่ง" data-i18n-placeholder="placeholder_position" class="w-full h-12 pl-11 pr-4
+                                            <input type="text" id="profile-position" placeholder="กรอกตำแหน่ง"
+                                                data-i18n-placeholder="placeholder_position" class="w-full h-12 pl-11 pr-4
                                                        rounded-xl
                                                        border border-slate-200
                                                        bg-slate-50
@@ -607,22 +612,15 @@
                                     </div>
 
 
-                                    <!-- Department -->
+                                    <!-- Major / Field of Study -->
                                     <div>
-
-                                        <label class="block text-sm font-medium
-                                                      text-slate-600 mb-2" data-i18n="department">
-                                            สาขาวิชา / คณะ
+                                        <label class="block text-sm font-medium text-slate-600 mb-2" data-i18n="major_label">
+                                            สาขาวิชา
                                         </label>
-
                                         <div class="relative">
-
-                                            <i class="fa-solid fa-building
-                                                      absolute left-4 top-1/2
-                                                      -translate-y-1/2
-                                                      text-slate-400"></i>
-
-                                            <input type="text" id="profile-department" placeholder="ข้อมูลสาขา/คณะ" data-i18n-placeholder="placeholder_department" class="w-full h-12 pl-11 pr-4
+                                            <i class="fa-solid fa-graduation-cap absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                            <input type="text" id="profile-major" placeholder="กรอกสาขาวิชา เช่น วิทยาการคอมพิวเตอร์"
+                                                data-i18n-placeholder="placeholder_major" class="w-full h-12 pl-11 pr-4
                                                        rounded-xl
                                                        border border-slate-200
                                                        bg-slate-50
@@ -631,9 +629,27 @@
                                                        focus:ring-2
                                                        focus:ring-pink-100
                                                        transition">
-
                                         </div>
+                                    </div>
 
+                                    <!-- Faculty / Department -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-slate-600 mb-2" data-i18n="faculty_label">
+                                            คณะ / หน่วยงาน
+                                        </label>
+                                        <div class="relative">
+                                            <i class="fa-solid fa-building absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                            <input type="text" id="profile-department" placeholder="กรอกคณะ เช่น คณะวิทยาศาสตร์และเทคโนโลยี"
+                                                data-i18n-placeholder="placeholder_faculty" class="w-full h-12 pl-11 pr-4
+                                                       rounded-xl
+                                                       border border-slate-200
+                                                       bg-slate-50
+                                                       outline-none
+                                                       focus:border-pink-400
+                                                       focus:ring-2
+                                                       focus:ring-pink-100
+                                                       transition">
+                                        </div>
                                     </div>
 
 
@@ -652,7 +668,8 @@
                                                       -translate-y-1/2
                                                       text-slate-400"></i>
 
-                                            <input type="tel" id="profile-phone" placeholder="กรอกเบอร์โทรศัพท์ของท่าน" data-i18n-placeholder="placeholder_phone" class="w-full h-12 pl-11 pr-4
+                                            <input type="tel" id="profile-phone" placeholder="กรอกเบอร์โทรศัพท์ของท่าน"
+                                                data-i18n-placeholder="placeholder_phone" class="w-full h-12 pl-11 pr-4
                                                        rounded-xl
                                                        border border-slate-200
                                                        bg-slate-50
@@ -677,7 +694,8 @@
                                         เกี่ยวกับฉัน / คำแนะนำตัว
                                     </label>
 
-                                    <textarea id="profile-bio" rows="4" placeholder="แนะนำตัวเองสั้นๆ..." data-i18n-placeholder="placeholder_bio" class="w-full p-4 rounded-xl
+                                    <textarea id="profile-bio" rows="4" placeholder="แนะนำตัวเองสั้นๆ..."
+                                        data-i18n-placeholder="placeholder_bio" class="w-full p-4 rounded-xl
                                                border border-slate-200
                                                bg-slate-50
                                                outline-none resize-none
@@ -718,7 +736,8 @@
 
                                 </div>
 
-                                <p id="profile-status-msg" class="hidden mt-4 p-3 rounded-xl text-sm text-center font-medium"></p>
+                                <p id="profile-status-msg"
+                                    class="hidden mt-4 p-3 rounded-xl text-sm text-center font-medium"></p>
 
                             </div>
 
@@ -740,13 +759,15 @@
 
                                 <!-- รหัสผ่านเดิม -->
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-2" data-i18n="old_password">
+                                    <label class="block text-sm font-medium text-slate-600 mb-2"
+                                        data-i18n="old_password">
                                         รหัสผ่านเดิม
                                     </label>
                                     <div class="relative">
                                         <i
                                             class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                        <input type="password" id="oldPassword" placeholder="กรอกรหัสผ่านเดิม" data-i18n-placeholder="placeholder_old_password"
+                                        <input type="password" id="oldPassword" placeholder="กรอกรหัสผ่านเดิม"
+                                            data-i18n-placeholder="placeholder_old_password"
                                             class="w-full h-12 pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition">
                                         <button type="button"
                                             onclick="togglePasswordVisibility('oldPassword', 'oldPasswordIcon')"
@@ -759,13 +780,15 @@
 
                                 <!-- รหัสผ่านใหม่ -->
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-2" data-i18n="new_password">
+                                    <label class="block text-sm font-medium text-slate-600 mb-2"
+                                        data-i18n="new_password">
                                         รหัสผ่านใหม่
                                     </label>
                                     <div class="relative">
                                         <i
                                             class="fa-solid fa-key absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                        <input type="password" id="newPassword" placeholder="กรอกรหัสผ่านใหม่" data-i18n-placeholder="placeholder_new_password"
+                                        <input type="password" id="newPassword" placeholder="กรอกรหัสผ่านใหม่"
+                                            data-i18n-placeholder="placeholder_new_password"
                                             class="w-full h-12 pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition">
                                         <button type="button"
                                             onclick="togglePasswordVisibility('newPassword', 'newPasswordIcon')"
@@ -778,13 +801,15 @@
 
                                 <!-- ยืนยันรหัสผ่านใหม่ -->
                                 <div>
-                                    <label class="block text-sm font-medium text-slate-600 mb-2" data-i18n="confirm_password">
+                                    <label class="block text-sm font-medium text-slate-600 mb-2"
+                                        data-i18n="confirm_password">
                                         ยืนยันรหัสผ่านใหม่
                                     </label>
                                     <div class="relative">
                                         <i
                                             class="fa-solid fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                                        <input type="password" id="confirmPassword" placeholder="ยืนยันรหัสผ่านใหม่" data-i18n-placeholder="placeholder_confirm_password"
+                                        <input type="password" id="confirmPassword" placeholder="ยืนยันรหัสผ่านใหม่"
+                                            data-i18n-placeholder="placeholder_confirm_password"
                                             class="w-full h-12 pl-11 pr-12 rounded-xl border border-slate-200 bg-slate-50 outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition">
                                         <button type="button"
                                             onclick="togglePasswordVisibility('confirmPassword', 'confirmPasswordIcon')"
@@ -822,7 +847,7 @@
             let currentUser = null;
             const rawUser = localStorage.getItem('currentUser');
             if (rawUser) {
-                try { currentUser = JSON.parse(rawUser); } catch(e) {}
+                try { currentUser = JSON.parse(rawUser); } catch (e) { }
             }
 
             // Elements
@@ -835,6 +860,7 @@
             const lastNameInput = document.getElementById('profile-last-name');
             const emailInput = document.getElementById('profile-email');
             const positionInput = document.getElementById('profile-position');
+            const majorInput = document.getElementById('profile-major');
             const departmentInput = document.getElementById('profile-department');
             const phoneInput = document.getElementById('profile-phone');
             const bioInput = document.getElementById('profile-bio');
@@ -851,19 +877,32 @@
 
                 if (avatarLarge) avatarLarge.textContent = user.avatar || (fName ? fName[0].toUpperCase() : 'U');
                 if (headingName) headingName.textContent = fullName || 'โปรไฟล์ผู้ใช้';
-                if (headingRole) headingRole.textContent = user.role || 'นักศึกษา';
+                const currentLang = localStorage.getItem('language') || 'th';
+                if (headingRole) {
+                    const roleName = user.role || 'นักศึกษา';
+                    if (currentLang === 'en') {
+                        const enMap = { 'นักศึกษา': 'Student', 'อาจารย์': 'Teacher', 'บุคลากร': 'Staff' };
+                        headingRole.textContent = enMap[roleName] || roleName;
+                    } else {
+                        headingRole.textContent = roleName;
+                    }
+                }
                 if (headingId) {
-                    let idTitle = 'รหัสนักศึกษา';
-                    if (user.role === 'อาจารย์') idTitle = 'รหัสอาจารย์';
-                    else if (user.role === 'บุคลากร') idTitle = 'รหัสบุคลากร';
+                    let idTitle = currentLang === 'en' ? 'Student ID' : 'รหัสนักศึกษา';
+                    if (user.role === 'อาจารย์') idTitle = currentLang === 'en' ? 'Teacher ID' : 'รหัสอาจารย์';
+                    else if (user.role === 'บุคลากร') idTitle = currentLang === 'en' ? 'Staff ID' : 'รหัสบุคลากร';
                     headingId.textContent = user.studentId ? `${idTitle}: ${user.studentId}` : '';
                 }
 
                 if (firstNameInput) firstNameInput.value = fName;
                 if (lastNameInput) lastNameInput.value = lName;
                 if (emailInput) emailInput.value = user.email || '';
-                if (positionInput) positionInput.value = user.role || 'นักศึกษา';
-                if (departmentInput) departmentInput.value = user.faculty || user.department || 'คณะวิทยาศาสตร์และเทคโนโลยี';
+                if (positionInput) {
+                    const enMap = { 'นักศึกษา': 'Student', 'อาจารย์': 'Teacher', 'บุคลากร': 'Staff' };
+                    positionInput.value = currentLang === 'en' ? (enMap[user.role] || user.role || 'Student') : (user.role || 'นักศึกษา');
+                }
+                if (majorInput) majorInput.value = user.major || '';
+                if (departmentInput) departmentInput.value = user.faculty || user.department || (currentLang === 'en' ? 'Faculty of Science and Technology' : 'คณะวิทยาศาสตร์และเทคโนโลยี');
                 if (phoneInput) phoneInput.value = user.phone || '';
                 if (bioInput) bioInput.value = user.bio || '';
             }
@@ -875,10 +914,15 @@
                     const res = await fetch('/api/user');
                     const defaultUser = await res.json();
                     populateUI(defaultUser);
-                } catch(e) {
+                } catch (e) {
                     console.log('Notice: using offline profile defaults');
                 }
             }
+
+            // Listen to language changes
+            window.addEventListener('languageChange', () => {
+                if (currentUser) populateUI(currentUser);
+            });
 
             // Save profile changes
             if (btnSave) {
@@ -886,7 +930,8 @@
                     const fName = firstNameInput.value.trim();
                     const lName = lastNameInput.value.trim();
                     const updatedFullName = `${fName} ${lName}`.trim();
-                    const updatedFaculty = departmentInput.value.trim();
+                    const updatedMajor = majorInput ? majorInput.value.trim() : '';
+                    const updatedFaculty = departmentInput ? departmentInput.value.trim() : '';
                     const updatedPhone = phoneInput.value.trim();
                     const updatedBio = bioInput.value.trim();
                     const updatedRole = positionInput.value.trim();
@@ -906,6 +951,7 @@
                                 studentId: targetStudentId,
                                 fullName: updatedFullName,
                                 role: updatedRole,
+                                major: updatedMajor,
                                 faculty: updatedFaculty,
                                 phone: updatedPhone,
                                 bio: updatedBio
@@ -918,7 +964,13 @@
                                 currentUser = { ...currentUser, ...data.user };
                                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                             }
-                            populateUI(currentUser || { fullName: updatedFullName, studentId: targetStudentId, faculty: updatedFaculty });
+                            populateUI(currentUser || {
+                                fullName: updatedFullName,
+                                studentId: targetStudentId,
+                                role: updatedRole,
+                                major: updatedMajor,
+                                faculty: updatedFaculty
+                            });
 
                             statusMsg.className = "mt-4 p-3 rounded-xl text-sm text-center font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 block";
                             statusMsg.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> บันทึกข้อมูลโปรไฟล์เรียบร้อยแล้ว!';
@@ -926,7 +978,7 @@
                             statusMsg.className = "mt-4 p-3 rounded-xl text-sm text-center font-medium bg-rose-50 text-rose-700 border border-rose-200 block";
                             statusMsg.textContent = data.error || 'เกิดข้อผิดพลาดในการบันทึกข้อมูล';
                         }
-                    } catch(err) {
+                    } catch (err) {
                         statusMsg.className = "mt-4 p-3 rounded-xl text-sm text-center font-medium bg-rose-50 text-rose-700 border border-rose-200 block";
                         statusMsg.textContent = 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้';
                     } finally {

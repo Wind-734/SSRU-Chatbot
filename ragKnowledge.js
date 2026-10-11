@@ -8,79 +8,115 @@ const RAG_DOCUMENTS = [
     id: "reg-01",
     category: "การลงทะเบียนเรียน",
     title: "ขั้นตอนการลงทะเบียนเรียนและปฏิทินวิชาการ",
-    keywords: ["ลงทะเบียน", "reg", "ปฏิทินวิชาการ", "เพิ่มถอน", "ลงทะเบียนเรียน", "แผนการเรียน", "วิชา"],
+    titleEn: "Course Registration Procedures & Academic Calendar",
+    keywords: ["ลงทะเบียน", "reg", "ปฏิทินวิชาการ", "เพิ่มถอน", "ลงทะเบียนเรียน", "แผนการเรียน", "วิชา", "register", "registration", "enroll", "enrollment", "course", "add", "drop", "calendar", "classes"],
     source: "https://reg.ssru.ac.th (https://share.google/o9BnGzbQACRVfvE4n)",
     content: `การลงทะเบียนเรียน มหาวิทยาลัยราชภัฏสวนสุนันทา:
 1. นักศึกษาสามารถเข้าสู่ระบบ e-Regis ผ่านทางเว็บไซต์ https://reg.ssru.ac.th
 2. ไปที่เมนู "ลงทะเบียนเรียน" แล้วเลือกรายวิชาตามแผนการเรียนประจำภาคการศึกษา
 3. ตรวจสอบรายวิชา รหัสวิชา และกลุ่มเรียน (Sec) แล้วคลิกบันทึกและยืนยันการลงทะเบียน
 4. การเพิ่ม-ถอนรายวิชา (Add/Drop) สามารถทำได้ภายใน 2 สัปดาห์แรกของการเปิดภาคเรียนผ่านระบบออนไลน์
-5. การลงทะเบียนล่าช้า ต้องยื่นคำร้องผ่านระบบ e-Regis ตามกำหนดเวลาในปฏิทินวิชาการและชำระค่าปรับตามเกณฑ์มหาวิทยาลัย`
+5. การลงทะเบียนล่าช้า ต้องยื่นคำร้องผ่านระบบ e-Regis ตามกำหนดเวลาในปฏิทินวิชาการและชำระค่าปรับตามเกณฑ์มหาวิทยาลัย`,
+    contentEn: `SSRU Course Registration Procedures:
+1. Log in to the e-Regis system at https://reg.ssru.ac.th
+2. Select "Course Registration" and choose courses matching your curriculum plan.
+3. Review course codes, titles, and section numbers (Sec), then click Save and Confirm.
+4. Adding and dropping courses (Add/Drop) is permitted online within the first 2 weeks of each semester.
+5. Late registration requires submitting an online request via e-Regis within the academic calendar deadline and paying the university late fee.`
   },
   {
     id: "reg-02",
     category: "ค่าธรรมเนียมและผ่อนผัน",
     title: "การชำระเงินและการขอผ่อนผันค่าธรรมเนียมการศึกษา",
-    keywords: ["ผ่อนผัน", "ค่าเทอม", "ค่าธรรมเนียม", "จ่ายเงิน", "ชำระเงิน", "ใบแจ้งชำระ", "qr code", "ธนาคาร"],
+    titleEn: "Tuition Fee Payment & Deferment Guidelines",
+    keywords: ["ผ่อนผัน", "ค่าเทอม", "ค่าธรรมเนียม", "จ่ายเงิน", "ชำระเงิน", "ใบแจ้งชำระ", "qr code", "ธนาคาร", "fee", "tuition", "payment", "pay", "defer", "deferment", "invoice", "bank"],
     source: "https://reg.ssru.ac.th (https://share.google/o9BnGzbQACRVfvE4n)",
     content: `การชำระเงินและการขอผ่อนผันค่าธรรมเนียมการศึกษา:
 1. การพิมพ์ใบชำระเงิน (Invoice): เข้าสู่ระบบ e-Regis เมนู "พิมพ์ใบชำระเงิน"
 2. ช่องทางการชำระเงิน: สามารถชำระผ่าน App Mobile Banking ทุกธนาคารโดยการสแกน QR Code หรือชำระที่เคาน์เตอร์ธนาคารกรุงเทพ / ธนาคารไทยพาณิชย์
-3. การขอผ่อนผันค่าเทอม: นักศึกษาที่ไม่สามารถชำระเงินได้ตามกำหนด สามารถยื่นคำร้องขอผ่อนผันผ่านระบบออนไลน์ reg.ssru.ac.th หรือกองพัฒนานักศึกษา ตามช่วงเวลาที่เปิดให้ยื่นคำร้องในปฏิทินการศึกษา`
+3. การขอผ่อนผันค่าเทอม: นักศึกษาที่ไม่สามารถชำระเงินได้ตามกำหนด สามารถยื่นคำร้องขอผ่อนผันผ่านระบบออนไลน์ reg.ssru.ac.th หรือกองพัฒนานักศึกษา ตามช่วงเวลาที่เปิดให้ยื่นคำร้องในปฏิทินการศึกษา`,
+    contentEn: `SSRU Tuition Fee Payment and Deferment:
+1. Printing Invoice: Log in to e-Regis (https://reg.ssru.ac.th) and select "Print Invoice".
+2. Payment Channels: Scan the QR Code via any Mobile Banking App, or pay at Bangkok Bank / Siam Commercial Bank (SCB) counter services.
+3. Tuition Deferment: Students unable to pay on time can apply for online deferment at reg.ssru.ac.th or contact the Student Development Division per the academic calendar schedule.`
   },
   {
     id: "reg-03",
     category: "ตารางสอบและผลการเรียน",
     title: "การตรวจสอบตารางสอบ ผลการเรียน และการแก้ไขเกรด",
-    keywords: ["ตารางสอบ", "สอบกลางภาค", "สอบปลายภาค", "เกรด", "ผลการเรียน", "แก้ไขเกรด", "แก้เกรด", "ติด I", "transcript", "เช็ค", "เช็คเกรด", "เช็คตารางสอบ"],
+    titleEn: "Exam Schedule, Academic Results & Grade Correction",
+    keywords: ["ตารางสอบ", "สอบกลางภาค", "สอบปลายภาค", "เกรด", "ผลการเรียน", "แก้ไขเกรด", "แก้เกรด", "ติด I", "transcript", "เช็ค", "เช็คเกรด", "เช็คตารางสอบ", "exam", "test", "midterm", "final", "schedule", "grade", "grades", "gpa", "gpax", "result"],
     source: "https://reg.ssru.ac.th (https://share.google/o9BnGzbQACRVfvE4n)",
     content: `ตารางสอบและผลการเรียน SSRU:
 1. ตารางสอบ: ตรวจสอบวัน เวลา และห้องสอบกลางภาค/ปลายภาค ได้ที่เว็บไซต์ https://reg.ssru.ac.th เมนู "ตารางสอบนักศึกษา" โดยระบุรหัสนักศึกษา
 2. ตรวจสอบผลการเรียน: เข้าสู่ระบบ e-Regis เมนู "ผลการเรียน" เพื่อดูเกรดประจำภาคเรียนและเกรดเฉลี่ยสะสม (GPAX)
-3. การขอแก้เกรด I / I-S: นักศึกษาต้องติดต่ออาจารย์ผู้สอนเพื่อส่งมอบงานหรือประเมินผลการเรียนเพิ่มเติม จากนั้นยื่นคำร้องขอแก้ไขเกรดต่อฝ่ายทะเบียนฯ ภายในระยะเวลาที่กำหนด`
+3. การขอแก้เกรด I / I-S: นักศึกษาต้องติดต่ออาจารย์ผู้สอนเพื่อส่งมอบงานหรือประเมินผลการเรียนเพิ่มเติม จากนั้นยื่นคำร้องขอแก้ไขเกรดต่อฝ่ายทะเบียนฯ ภายในระยะเวลาที่กำหนด`,
+    contentEn: `SSRU Examination Schedules and Grade Verification:
+1. Examination Schedule: Check midterm and final exam dates, times, and exam rooms at https://reg.ssru.ac.th under "Student Exam Schedule" using your Student ID.
+2. Academic Performance: Check semester grades and cumulative GPA (GPAX) in e-Regis under "Academic Results".
+3. Grade I / I-S Correction: Contact your course instructor to complete required tasks or exams, then submit a formal grade change request to the Registrar Office before the deadline.`
   },
   {
     id: "reg-04",
     category: "เอกสารทางการศึกษา",
     title: "การขอหนังสือรับรอง ใบรายงานผลการศึกษา (Transcript) ผ่านระบบ One Stop Service",
-    keywords: ["เอกสาร", "ใบรับรอง", "transcript", "ใบเกรด", "หนังสือรับรอง", "one stop service", "ขอเอกสาร"],
+    titleEn: "Official Academic Document Request (One Stop Service)",
+    keywords: ["เอกสาร", "ใบรับรอง", "transcript", "ใบเกรด", "หนังสือรับรอง", "one stop service", "ขอเอกสาร", "document", "documents", "certificate", "paper", "one stop"],
     source: "https://reg.ssru.ac.th (https://share.google/o9BnGzbQACRVfvE4n)",
     content: `การขอเอกสารทางการศึกษา (One Stop Service):
 1. นักศึกษาสามารถยื่นคำร้องขอเอกสารออนไลน์ได้ที่เว็บไซต์ https://reg.ssru.ac.th ในระบบ One Stop Service
 2. เอกสารที่สามารถยื่นขอได้: ใบแสดงผลการเรียน (Transcript ไทย/อังกฤษ), หนังสือรับรองสถานภาพนักศึกษา, หนังสือรับรองคาดว่าจะสำเร็จการศึกษา
-3. รูปแบบการรับเอกสาร: สามารถเลือกรับเป็นไฟล์ PDF (Digital Document), รับด้วยตนเองที่ฝ่ายทะเบียนฯ อาคาร 32 ชั้น 1 หรือจัดส่งทางไปรษณีย์`
+3. รูปแบบการรับเอกสาร: สามารถเลือกรับเป็นไฟล์ PDF (Digital Document), รับด้วยตนเองที่ฝ่ายทะเบียนฯ อาคาร 32 ชั้น 1 หรือจัดส่งทางไปรษณีย์`,
+    contentEn: `Online Academic Document Request (One Stop Service):
+1. Request documents online at https://reg.ssru.ac.th via One Stop Service.
+2. Available documents: Transcripts (Thai/English), Certificate of Student Status, Certificate of Expected Graduation.
+3. Receiving options: Digital PDF file, self-pickup at Office of the Registrar (Building 32, 1st Floor), or postal delivery.`
   },
   {
     id: "reg-05",
     category: "ทุนการศึกษาและ กยศ.",
     title: "ทุนการศึกษาและกองทุนกู้ยืมเพื่อการศึกษา (กยศ./กรอ.)",
-    keywords: ["ทุน", "ทุนการศึกษา", "กยศ", "กรอ", "กู้ยืม", "ทุนเรียนดี", "ทุนขาดแคลน"],
+    titleEn: "Scholarships & Student Loan Fund (กยศ./กรอ.)",
+    keywords: ["ทุน", "ทุนการศึกษา", "กยศ", "กรอ", "กู้ยืม", "ทุนเรียนดี", "ทุนขาดแคลน", "scholarship", "scholarships", "loan", "loans", "financial aid", "grant"],
     source: "https://reg.ssru.ac.th (https://share.google/o9BnGzbQACRVfvE4n)",
     content: `ทุนการศึกษาและ กยศ./กรอ. มหาวิทยาลัยราชภัฏสวนสุนันทา:
 1. กู้ยืม กยศ. / กรอ.: นักศึกษาต้องดำเนินการผ่านระบบ DSL ของกองทุนฯ และบันทึกข้อมูลยืนยันในระบบ e-Regis / กองพัฒนานักศึกษา SSRU
-2. ทุนการศึกษามหาวิทยาลัย: มีทั้งทุนเรียนดี, ทุนขาดแคลนทุนทรัพย์ และทุนสนับสนุนกิจกรรม ติดตามประกาศเปิดรับสมัครผ่านทาง reg.ssru.ac.th และแฟนเพจกองพัฒนานักศึกษา SSRU`
+2. ทุนการศึกษามหาวิทยาลัย: มีทั้งทุนเรียนดี, ทุนขาดแคลนทุนทรัพย์ และทุนสนับสนุนกิจกรรม ติดตามประกาศเปิดรับสมัครผ่านทาง reg.ssru.ac.th และแฟนเพจกองพัฒนานักศึกษา SSRU`,
+    contentEn: `SSRU Scholarships & Student Loans (กยศ./กรอ.):
+1. Student Loans: Apply through the Fund's DSL system and verify documentation in e-Regis / Student Development Division.
+2. University Scholarships: Academic merit, financial assistance, and activity scholarships are offered. Follow recruitment updates at reg.ssru.ac.th and the official SSRU Student Development fanpage.`
   },
   {
     id: "reg-06",
     category: "สถานภาพนักศึกษา",
     title: "การลาพักการเรียน การรักษาสภาพ และการขอคืนสภาพนักศึกษา",
-    keywords: ["ลาพัก", "ลาพักการเรียน", "พ้นสภาพ", "รักษาสภาพ", "คืนสภาพ", "สถานะนักศึกษา"],
+    titleEn: "Student Status, Leave of Absence & Reinstatement",
+    keywords: ["ลาพัก", "ลาพักการเรียน", "พ้นสภาพ", "รักษาสภาพ", "คืนสภาพ", "สถานะนักศึกษา", "leave", "absence", "maintain", "status", "reinstatement", "drop out"],
     source: "https://reg.ssru.ac.th (https://share.google/o9BnGzbQACRVfvE4n)",
     content: `สถานภาพนักศึกษาและการลาพักการเรียน:
 1. การขอลาพักการเรียน: หากมีเหตุจำเป็นไม่สามารถเรียนได้ ให้ยื่นคำร้องขอลาพักการเรียนผ่านระบบ e-Regis โดยต้องผ่านการอนุมัติจากอาจารย์ที่ปรึกษาและคณบดี
 2. การรักษาสภาพนักศึกษา: ต้องชำระค่าธรรมเนียมรักษาสภาพนักศึกษาตามกำหนดเพื่อมิให้พ้นสภาพการเป็นนักศึกษา
-3. การขอคืนสภาพนักศึกษา: กรณีพ้นสภาพเนื่องจากขาดการลงทะเบียน สามารถยื่นคำร้องขอคืนสภาพพร้อมชำระค่าธรรมเนียมตามระเบียบมหาวิทยาลัย`
+3. การขอคืนสภาพนักศึกษา: กรณีพ้นสภาพเนื่องจากขาดการลงทะเบียน สามารถยื่นคำร้องขอคืนสภาพพร้อมชำระค่าธรรมเนียมตามระเบียบมหาวิทยาลัย`,
+    contentEn: `Student Status and Leave of Absence:
+1. Leave of Absence Request: If unable to continue studies temporarily, submit a leave of absence application on e-Regis with academic advisor and dean approval.
+2. Maintaining Status: Pay student status maintenance fee as scheduled to prevent dismissal.
+3. Status Reinstatement: If dismissed due to missing registration, apply for reinstatement and pay fees according to university regulations.`
   },
   {
     id: "reg-07",
     category: "ข้อมูลติดต่อ",
     title: "ข้อมูลติดต่อฝ่ายทะเบียนและประมวลผล มหาวิทยาลัยราชภัฏสวนสุนันทา",
-    keywords: ["ติดต่อ", "เบอร์โทร", "สถานที่", "อาคาร 32", "ฝ่ายทะเบียน", "เวลาทำการ", "แผนที่"],
+    titleEn: "SSRU Office of the Registrar Contact Information",
+    keywords: ["ติดต่อ", "เบอร์โทร", "สถานที่", "อาคาร 32", "ฝ่ายทะเบียน", "เวลาทำการ", "แผนที่", "contact", "location", "office", "registrar", "hours", "address", "phone", "building 32"],
     source: "https://reg.ssru.ac.th (https://share.google/o9BnGzbQACRVfvE4n)",
     content: `ข้อมูลติดต่อ ฝ่ายทะเบียนและประมวลผล มหาวิทยาลัยราชภัฏสวนสุนันทา:
 - เว็บไซต์หลัก: https://reg.ssru.ac.th (ทางลัด: https://share.google/o9BnGzbQACRVfvE4n)
 - สถานที่ทำการ: อาคาร 32 ชั้น 1 มหาวิทยาลัยราชภัฏสวนสุนันทา เลขที่ 1 ถนนอู่ทองนอก แขวงดุสิต เขตดุสิต กรุงเทพมหานคร 10300
-- เวลาทำการ: วันจันทร์ - วันศุกร์ เวลา 08:30 - 16:30 น. (หยุดวันเสาร์-อาทิตย์ และวันหยุดนักขัตฤกษ์)`
+- เวลาทำการ: วันจันทร์ - วันศุกร์ เวลา 08:30 - 16:30 น. (หยุดวันเสาร์-อาทิตย์ และวันหยุดนักขัตฤกษ์)`,
+    contentEn: `Contact Information - SSRU Office of the Registrar:
+- Official Website: https://reg.ssru.ac.th (Shortcut: https://share.google/o9BnGzbQACRVfvE4n)
+- Location: Building 32, 1st Floor, Suan Sunandha Rajabhat University, 1 U-Thong Nok Road, Dusit, Bangkok 10300
+- Operating Hours: Monday - Friday 08:30 - 16:30 (Closed on weekends and public holidays)`
   }
 ];
 
@@ -105,6 +141,9 @@ function retrieveRAGContext(query, topK = 3) {
     if (lowerQuery.includes(doc.title.toLowerCase()) || doc.title.toLowerCase().includes(lowerQuery)) {
       score += 5;
     }
+    if (doc.titleEn && (lowerQuery.includes(doc.titleEn.toLowerCase()) || doc.titleEn.toLowerCase().includes(lowerQuery))) {
+      score += 5;
+    }
 
     // Check category match
     if (lowerQuery.includes(doc.category.toLowerCase())) {
@@ -114,7 +153,7 @@ function retrieveRAGContext(query, topK = 3) {
     // Check word overlaps in content
     const words = lowerQuery.split(/\s+/);
     words.forEach(w => {
-      if (w.length > 2 && doc.content.toLowerCase().includes(w)) {
+      if (w.length > 2 && (doc.content.toLowerCase().includes(w) || (doc.contentEn && doc.contentEn.toLowerCase().includes(w)))) {
         score += 1;
       }
     });

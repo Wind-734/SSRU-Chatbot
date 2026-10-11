@@ -7,7 +7,7 @@
             // Common / Header / Navigation
             site_title: "SSRU Chatbot",
             university_name: "มหาวิทยาลัยราชภัฏสวนสุนันทา",
-            university_sub: "Suan Sunandha Rajabhat University",
+            university_sub: "มหาวิทยาลัยราชภัฏสวนสุนันทา",
             back_to_main: "กลับหน้าหลัก",
             cancel: "ยกเลิก",
             confirm: "ยืนยัน",
@@ -32,7 +32,7 @@
             section_account: "ข้อมูลบัญชี",
             user_account_title: "บัญชีผู้ใช้งาน",
             user_account_desc: "จัดการข้อมูลโปรไฟล์ส่วนตัวของคุณ",
-            
+
             // Settings Modals
             clear_modal_title: "ยืนยันการล้างประวัติแชท",
             clear_modal_desc: "คุณต้องการลบประวัติการสนทนาทั้งหมดใช่หรือไม่? (การกระทำนี้ไม่สามารถย้อนกลับได้)",
@@ -49,6 +49,7 @@
             prompt_fee: "ขั้นตอนขอผ่อนผันค่าเทอม",
             prompt_exam: "ตารางสอบปลายภาค",
             prompt_scholarship: "ทุนการศึกษา",
+            prompt_calc: "คำนวณผ่อนค่าเทอม 3 งวด",
             prompt_translate: "แปลภาษา TH ➔ EN",
             input_placeholder: "พิมพ์ข้อความของคุณที่นี่...",
             disclaimer: "SSRU Chatbot อาจแสดงผลข้อมูลคลาดเคลื่อนได้ กรุณาตรวจสอบข้อมูลสำคัญอีกครั้ง",
@@ -118,6 +119,12 @@
             placeholder_staff_email: "เช่น staff@ssru.ac.th",
             confirm_register_password: "ยืนยันรหัสผ่าน",
             placeholder_confirm_reg_password: "กรอกยืนยันรหัสผ่าน",
+            major_label: "สาขาวิชา",
+            major_staff_label: "สาขาวิชา / ฝ่าย / แผนก",
+            placeholder_major: "กรอกสาขาวิชา เช่น วิทยาการคอมพิวเตอร์",
+            placeholder_major_staff: "กรอกสาขาวิชา ฝ่าย หรือแผนกงาน",
+            faculty_label: "คณะ / หน่วยงาน",
+            placeholder_faculty: "กรอกคณะ เช่น คณะวิทยาศาสตร์และเทคโนโลยี",
             btn_register: "สมัครสมาชิก",
             already_have_account: "มีบัญชีอยู่แล้ว?",
             login_now: "เข้าสู่ระบบ",
@@ -176,6 +183,7 @@
             prompt_fee: "Tuition Deferment Steps",
             prompt_exam: "Final Exam Schedule",
             prompt_scholarship: "Scholarships",
+            prompt_calc: "Calculate Tuition (3 Payments)",
             prompt_translate: "Translate TH ➔ EN",
             input_placeholder: "Type your message here...",
             disclaimer: "SSRU Chatbot may display inaccurate info. Please verify important details.",
@@ -230,8 +238,8 @@
             register_subtitle: "Fill in your details to create an account",
             role_label: "User Role",
             role_student: "Student",
-            role_teacher: "Teacher / Lecturer",
-            role_staff: "Staff / Personnel",
+            role_teacher: "Teacher",
+            role_staff: "Staff",
             full_name: "Full Name",
             student_id: "Student ID",
             teacher_id: "Teacher ID",
@@ -245,6 +253,12 @@
             placeholder_staff_email: "e.g. staff@ssru.ac.th",
             confirm_register_password: "Confirm Password",
             placeholder_confirm_reg_password: "Confirm your password",
+            major_label: "Major / Field of Study",
+            major_staff_label: "Department / Section",
+            placeholder_major: "Enter major e.g. Computer Science",
+            placeholder_major_staff: "Enter department or section",
+            faculty_label: "Faculty / Division",
+            placeholder_faculty: "Enter faculty e.g. Science and Technology",
             btn_register: "Sign Up",
             already_have_account: "Already have an account?",
             login_now: "Log In",
@@ -306,6 +320,12 @@
                 chip.setAttribute("data-active-prompt", chip.getAttribute("data-prompt"));
             }
         });
+
+        // 5. Update language indicator badge if present
+        const langIndicator = document.getElementById('lang-indicator');
+        if (langIndicator) {
+            langIndicator.textContent = targetLang.toUpperCase();
+        }
 
         // Dispatch window event for page specific scripts (e.g. app.js)
         window.dispatchEvent(new CustomEvent("languageChange", { detail: { language: targetLang } }));
@@ -483,7 +503,7 @@
         if (btnConfirmLogout) {
             btnConfirmLogout.addEventListener("click", () => {
                 sessionStorage.clear();
-                localStorage.clear();
+                localStorage.removeItem("currentUser");
                 window.location.href = "login.html";
             });
         }
@@ -518,8 +538,7 @@ function logout() {
         logoutModal.classList.add("active");
     } else {
         sessionStorage.clear();
-        localStorage.clear();
+        localStorage.removeItem("currentUser");
         window.location.href = "login.html";
     }
 }
-

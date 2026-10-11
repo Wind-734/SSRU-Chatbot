@@ -14,9 +14,7 @@
         rel="stylesheet">
 
     <!-- ไอคอน -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="public/css/style.css">
 
@@ -152,8 +150,7 @@
     <main class="flex min-h-screen items-center justify-center px-4 py-10">
 
         <!-- กล่องสมัครสมาชิก -->
-        <section
-            aria-labelledby="registerTitle"
+        <section aria-labelledby="registerTitle"
             class="w-full max-w-md rounded-2xl bg-white px-6 py-8 shadow-2xl sm:px-10">
 
             <!-- ชื่อเว็บไซต์ -->
@@ -191,46 +188,27 @@
 
                     <div class="grid grid-cols-3 gap-2 sm:gap-2.5" role="radiogroup" aria-label="เลือกบทบาทผู้ใช้งาน">
                         <!-- ตัวเลือกนักศึกษา -->
-                        <label
-                            id="roleStudentOption"
-                            class="role-option-btn selected flex cursor-pointer items-center justify-center gap-1.5 sm:gap-2 rounded-xl border-2 border-slate-200 bg-white p-2.5 sm:p-3 text-xs sm:text-sm font-medium text-slate-700">
-                            <input
-                                type="radio"
-                                name="role"
-                                id="roleStudent"
-                                value="นักศึกษา"
-                                checked
-                                class="sr-only">
+                        <label id="roleStudentOption"
+                            class="role-option-btn selected flex flex-col sm:flex-row cursor-pointer items-center justify-center gap-1 sm:gap-1.5 rounded-xl border-2 border-slate-200 bg-white p-2 sm:p-2.5 text-xs sm:text-sm font-medium text-slate-700 text-center transition">
+                            <input type="radio" name="role" id="roleStudent" value="นักศึกษา" checked class="sr-only">
                             <i class="fa-solid fa-graduation-cap text-sm sm:text-base"></i>
-                            <span data-i18n="role_student" class="truncate">นักศึกษา</span>
+                            <span data-i18n="role_student" class="whitespace-nowrap">นักศึกษา</span>
                         </label>
 
                         <!-- ตัวเลือกอาจารย์ -->
-                        <label
-                            id="roleTeacherOption"
-                            class="role-option-btn flex cursor-pointer items-center justify-center gap-1.5 sm:gap-2 rounded-xl border-2 border-slate-200 bg-white p-2.5 sm:p-3 text-xs sm:text-sm font-medium text-slate-700">
-                            <input
-                                type="radio"
-                                name="role"
-                                id="roleTeacher"
-                                value="อาจารย์"
-                                class="sr-only">
+                        <label id="roleTeacherOption"
+                            class="role-option-btn flex flex-col sm:flex-row cursor-pointer items-center justify-center gap-1 sm:gap-1.5 rounded-xl border-2 border-slate-200 bg-white p-2 sm:p-2.5 text-xs sm:text-sm font-medium text-slate-700 text-center transition">
+                            <input type="radio" name="role" id="roleTeacher" value="อาจารย์" class="sr-only">
                             <i class="fa-solid fa-chalkboard-user text-sm sm:text-base"></i>
-                            <span data-i18n="role_teacher" class="truncate">อาจารย์</span>
+                            <span data-i18n="role_teacher" class="whitespace-nowrap">อาจารย์</span>
                         </label>
 
                         <!-- ตัวเลือกบุคลากร -->
-                        <label
-                            id="roleStaffOption"
-                            class="role-option-btn flex cursor-pointer items-center justify-center gap-1.5 sm:gap-2 rounded-xl border-2 border-slate-200 bg-white p-2.5 sm:p-3 text-xs sm:text-sm font-medium text-slate-700">
-                            <input
-                                type="radio"
-                                name="role"
-                                id="roleStaff"
-                                value="บุคลากร"
-                                class="sr-only">
+                        <label id="roleStaffOption"
+                            class="role-option-btn flex flex-col sm:flex-row cursor-pointer items-center justify-center gap-1 sm:gap-1.5 rounded-xl border-2 border-slate-200 bg-white p-2 sm:p-2.5 text-xs sm:text-sm font-medium text-slate-700 text-center transition">
+                            <input type="radio" name="role" id="roleStaff" value="บุคลากร" class="sr-only">
                             <i class="fa-solid fa-user-tie text-sm sm:text-base"></i>
-                            <span data-i18n="role_staff" class="truncate">บุคลากร</span>
+                            <span data-i18n="role_staff" class="whitespace-nowrap">บุคลากร</span>
                         </label>
                     </div>
                 </div>
@@ -241,33 +219,32 @@
                         ชื่อ–นามสกุล
                     </label>
 
-                    <input
-                        type="text"
-                        id="fullName"
-                        name="fullName"
-                        autocomplete="name"
-                        placeholder="กรอกชื่อและนามสกุล"
-                        data-i18n-placeholder="placeholder_fullname"
-                        required
+                    <input type="text" id="fullName" name="fullName" autocomplete="name"
+                        placeholder="กรอกชื่อและนามสกุล" data-i18n-placeholder="placeholder_fullname" required
                         class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
                 </div>
 
                 <!-- รหัสนักศึกษา / รหัสอาจารย์ -->
                 <div>
-                    <label id="idNumberLabel" for="studentId" class="mb-2 block text-sm font-medium" data-i18n="student_id">
+                    <label id="idNumberLabel" for="studentId" class="mb-2 block text-sm font-medium"
+                        data-i18n="student_id">
                         รหัสนักศึกษา
                     </label>
 
-                    <input
-                        type="text"
-                        id="studentId"
-                        name="studentId"
-                        inputmode="numeric"
-                        pattern="[0-9]+"
-                        title="กรอกรหัสนักศึกษาเป็นตัวเลขเท่านั้น"
-                        placeholder="กรอกรหัสนักศึกษา"
-                        data-i18n-placeholder="placeholder_student_id"
-                        required
+                    <input type="text" id="studentId" name="studentId" inputmode="numeric" pattern="[0-9]+"
+                        title="กรอกรหัสนักศึกษาเป็นตัวเลขเท่านั้น" placeholder="กรอกรหัสนักศึกษา"
+                        data-i18n-placeholder="placeholder_student_id" required
+                        class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
+                </div>
+
+                <!-- สาขาวิชา / แผนก / ฝ่าย -->
+                <div>
+                    <label id="majorLabel" for="major" class="mb-2 block text-sm font-medium" data-i18n="major_label">
+                        สาขาวิชา
+                    </label>
+
+                    <input type="text" id="major" name="major"
+                        placeholder="กรอกสาขาวิชา เช่น วิทยาการคอมพิวเตอร์" data-i18n-placeholder="placeholder_major" required
                         class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
                 </div>
 
@@ -277,14 +254,8 @@
                         อีเมล
                     </label>
 
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        autocomplete="email"
-                        placeholder="เช่น student@ssru.ac.th"
-                        data-i18n-placeholder="placeholder_reg_email"
-                        required
+                    <input type="email" id="email" name="email" autocomplete="email"
+                        placeholder="เช่น student@ssru.ac.th" data-i18n-placeholder="placeholder_reg_email" required
                         class="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
                 </div>
 
@@ -295,24 +266,13 @@
                     </label>
 
                     <div class="relative">
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            autocomplete="new-password"
-                            aria-describedby="passwordHint"
-                            minlength="8"
-                            placeholder="กรอกรหัสผ่าน"
-                            data-i18n-placeholder="placeholder_password"
-                            required
+                        <input type="password" id="password" name="password" autocomplete="new-password"
+                            aria-describedby="passwordHint" minlength="8" placeholder="กรอกรหัสผ่าน"
+                            data-i18n-placeholder="placeholder_password" required
                             class="w-full rounded-lg border border-slate-300 py-3 pl-4 pr-12 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
 
-                        <button
-                            type="button"
-                            data-password-toggle="password"
-                            aria-controls="password"
-                            aria-label="แสดงรหัสผ่าน"
-                            aria-pressed="false"
+                        <button type="button" data-password-toggle="password" aria-controls="password"
+                            aria-label="แสดงรหัสผ่าน" aria-pressed="false"
                             class="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-lg text-slate-400 hover:text-primary-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-pink">
                             <i class="fa-solid fa-eye" aria-hidden="true"></i>
                         </button>
@@ -321,28 +281,19 @@
 
                 <!-- ยืนยันรหัสผ่าน -->
                 <div>
-                    <label for="confirmPassword" class="mb-2 block text-sm font-medium" data-i18n="confirm_register_password">
+                    <label for="confirmPassword" class="mb-2 block text-sm font-medium"
+                        data-i18n="confirm_register_password">
                         ยืนยันรหัสผ่าน
                     </label>
 
                     <div class="relative">
-                        <input
-                            type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            autocomplete="new-password"
-                            minlength="8"
-                            placeholder="กรอกยืนยันรหัสผ่าน"
-                            data-i18n-placeholder="placeholder_confirm_reg_password"
-                            required
+                        <input type="password" id="confirmPassword" name="confirmPassword" autocomplete="new-password"
+                            minlength="8" placeholder="กรอกยืนยันรหัสผ่าน"
+                            data-i18n-placeholder="placeholder_confirm_reg_password" required
                             class="w-full rounded-lg border border-slate-300 py-3 pl-4 pr-12 text-sm outline-none transition placeholder:text-slate-400 focus:border-primary-pink focus:ring-2 focus:ring-pink-100">
 
-                        <button
-                            type="button"
-                            data-password-toggle="confirmPassword"
-                            aria-controls="confirmPassword"
-                            aria-label="แสดงรหัสผ่านยืนยัน"
-                            aria-pressed="false"
+                        <button type="button" data-password-toggle="confirmPassword" aria-controls="confirmPassword"
+                            aria-label="แสดงรหัสผ่านยืนยัน" aria-pressed="false"
                             class="absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-lg text-slate-400 hover:text-primary-pink focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-pink">
                             <i class="fa-solid fa-eye" aria-hidden="true"></i>
                         </button>
@@ -350,17 +301,14 @@
                 </div>
 
                 <!-- ปุ่มสมัครสมาชิก -->
-                <button
-                    type="submit"
+                <button type="submit"
                     class="w-full rounded-lg bg-primary-pink px-4 py-3 font-medium text-white transition hover:bg-primary-hover focus:outline-none focus:ring-4 focus:ring-pink-200 active:scale-[0.99]"
                     data-i18n="btn_register">
                     สมัครสมาชิก
                 </button>
 
                 <!-- ข้อความแจ้งผลสำหรับหน้าตัวอย่าง -->
-                <p
-                    id="formMessage"
-                    role="status"
+                <p id="formMessage" role="status"
                     class="hidden rounded-lg bg-slate-100 p-3 text-sm leading-relaxed text-slate-700">
                 </p>
             </form>
@@ -368,9 +316,7 @@
             <!-- กลับไปหน้า Login -->
             <p class="mt-6 text-center text-sm text-slate-500">
                 <span data-i18n="already_have_account">มีบัญชีอยู่แล้ว?</span>
-                <a
-                    href="login.html"
-                    class="font-medium text-primary-pink hover:text-primary-hover hover:underline"
+                <a href="login.html" class="font-medium text-primary-pink hover:text-primary-hover hover:underline"
                     data-i18n="login_now">
                     เข้าสู่ระบบ
                 </a>
@@ -390,11 +336,13 @@
         const roleStaffOption = document.getElementById('roleStaffOption');
         const idNumberLabel = document.getElementById('idNumberLabel');
         const studentIdInput = document.getElementById('studentId');
+        const majorLabel = document.getElementById('majorLabel');
+        const majorInput = document.getElementById('major');
         const emailInput = document.getElementById('email');
 
         // สลับบทบาท (นักศึกษา vs อาจารย์ vs บุคลากร)
         function updateRoleSelection(role) {
-            const currentLang = localStorage.getItem('site_lang') || 'th';
+            const currentLang = localStorage.getItem('language') || localStorage.getItem('site_lang') || 'th';
 
             // เคลียร์ class selected ของทุกตัวเลือกก่อน
             roleStudentOption?.classList.remove('selected');
@@ -417,6 +365,16 @@
                     studentIdInput.title = currentLang === 'en' ? 'Letters and numbers allowed' : 'กรอกรหัสอาจารย์เป็นตัวอักษรหรือตัวเลข';
                 }
 
+                if (majorLabel) {
+                    majorLabel.setAttribute('data-i18n', 'major_label');
+                    majorLabel.textContent = currentLang === 'en' ? 'Major / Program' : 'สาขาวิชา';
+                }
+
+                if (majorInput) {
+                    majorInput.setAttribute('data-i18n-placeholder', 'placeholder_major');
+                    majorInput.placeholder = currentLang === 'en' ? 'Enter major e.g. Computer Science' : 'กรอกสาขาวิชา เช่น วิทยาการคอมพิวเตอร์';
+                }
+
                 if (emailInput) {
                     emailInput.setAttribute('data-i18n-placeholder', 'placeholder_teacher_email');
                     emailInput.placeholder = currentLang === 'en' ? 'e.g. teacher@ssru.ac.th' : 'เช่น teacher@ssru.ac.th';
@@ -437,6 +395,16 @@
                     studentIdInput.title = currentLang === 'en' ? 'Letters and numbers allowed' : 'กรอกรหัสบุคลากรเป็นตัวอักษรหรือตัวเลข';
                 }
 
+                if (majorLabel) {
+                    majorLabel.setAttribute('data-i18n', 'major_staff_label');
+                    majorLabel.textContent = currentLang === 'en' ? 'Department / Section' : 'สาขาวิชา / ฝ่าย / แผนก';
+                }
+
+                if (majorInput) {
+                    majorInput.setAttribute('data-i18n-placeholder', 'placeholder_major_staff');
+                    majorInput.placeholder = currentLang === 'en' ? 'Enter department or section' : 'กรอกสาขาวิชา ฝ่าย หรือแผนกงาน';
+                }
+
                 if (emailInput) {
                     emailInput.setAttribute('data-i18n-placeholder', 'placeholder_staff_email');
                     emailInput.placeholder = currentLang === 'en' ? 'e.g. staff@ssru.ac.th' : 'เช่น staff@ssru.ac.th';
@@ -455,6 +423,16 @@
                     studentIdInput.inputMode = 'numeric';
                     studentIdInput.pattern = '[0-9]+';
                     studentIdInput.title = currentLang === 'en' ? 'Numbers only' : 'กรอกรหัสนักศึกษาเป็นตัวเลขเท่านั้น';
+                }
+
+                if (majorLabel) {
+                    majorLabel.setAttribute('data-i18n', 'major_label');
+                    majorLabel.textContent = currentLang === 'en' ? 'Major / Field of Study' : 'สาขาวิชา';
+                }
+
+                if (majorInput) {
+                    majorInput.setAttribute('data-i18n-placeholder', 'placeholder_major');
+                    majorInput.placeholder = currentLang === 'en' ? 'Enter major e.g. Computer Science' : 'กรอกสาขาวิชา เช่น วิทยาการคอมพิวเตอร์';
                 }
 
                 if (emailInput) {
@@ -529,15 +507,17 @@
             const selectedRole = document.querySelector('input[name="role"]:checked')?.value || 'นักศึกษา';
             const fullName = document.getElementById("fullName").value.trim();
             const studentId = document.getElementById("studentId").value.trim();
+            const major = document.getElementById("major") ? document.getElementById("major").value.trim() : '';
             const email = document.getElementById("email").value.trim();
             const passwordVal = password.value;
             const submitBtn = form.querySelector('button[type="submit"]');
 
             // แสดงสถานะกำลังบันทึก
+            const currentLang = localStorage.getItem('language') || 'th';
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังบันทึกข้อมูล...';
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> ${currentLang === 'en' ? 'Saving data...' : 'กำลังบันทึกข้อมูล...'}`;
             formMessage.className = "rounded-lg bg-blue-50 text-blue-700 border border-blue-200 p-3 text-sm leading-relaxed";
-            formMessage.textContent = "กำลังเชื่อมต่อฐานข้อมูลเพื่อสร้างบัญชีผู้ใช้...";
+            formMessage.textContent = currentLang === 'en' ? 'Connecting to system to create account...' : 'กำลังเชื่อมต่อฐานข้อมูลเพื่อสร้างบัญชีผู้ใช้...';
             formMessage.classList.remove("hidden");
 
             try {
@@ -549,7 +529,8 @@
                         studentId,
                         email,
                         password: passwordVal,
-                        role: selectedRole
+                        role: selectedRole,
+                        major
                     })
                 });
 
@@ -557,25 +538,28 @@
 
                 if (response.ok && data.success) {
                     formMessage.className = "rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 p-3 text-sm leading-relaxed font-medium";
-                    formMessage.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> สมัครสมาชิกในบทบาท "${selectedRole}" สำเร็จเรียบร้อยแล้ว! กำลังนำคุณไปหน้าเข้าสู่ระบบ...`;
-                    
+                    const roleLabelEn = { 'นักศึกษา': 'Student', 'อาจารย์': 'Teacher', 'บุคลากร': 'Staff' }[selectedRole] || selectedRole;
+                    formMessage.innerHTML = currentLang === 'en'
+                        ? `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> Registration for "${roleLabelEn}" successful! Redirecting to login...`
+                        : `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> สมัครสมาชิกในบทบาท "${selectedRole}" สำเร็จเรียบร้อยแล้ว! กำลังนำคุณไปหน้าเข้าสู่ระบบ...`;
+
                     // บันทึกรหัสนักศึกษา/อาจารย์ไว้ให้ล่วงหน้าเพื่อให้หน้า login กรอกให้อัตโนมัติ
                     localStorage.setItem('recentLoginIdentifier', studentId);
-                    
+
                     setTimeout(() => {
                         window.location.href = 'login.html';
                     }, 1500);
                 } else {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'สมัครสมาชิก';
+                    submitBtn.innerHTML = currentLang === 'en' ? 'Register' : 'สมัครสมาชิก';
                     formMessage.className = "rounded-lg bg-rose-50 text-rose-700 border border-rose-200 p-3 text-sm leading-relaxed";
-                    formMessage.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-600 mr-1.5"></i> ${data.error || 'เกิดข้อผิดพลาดในการสมัครสมาชิก'}`;
+                    formMessage.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-600 mr-1.5"></i> ${data.error || (currentLang === 'en' ? 'Error during registration' : 'เกิดข้อผิดพลาดในการสมัครสมาชิก')}`;
                 }
             } catch (err) {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = 'สมัครสมาชิก';
+                submitBtn.innerHTML = currentLang === 'en' ? 'Register' : 'สมัครสมาชิก';
                 formMessage.className = "rounded-lg bg-rose-50 text-rose-700 border border-rose-200 p-3 text-sm leading-relaxed";
-                formMessage.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5"></i> ไม่สามารถติดต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่อ';
+                formMessage.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5"></i> ${currentLang === 'en' ? 'Cannot connect to server. Please check connection.' : 'ไม่สามารถติดต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบการเชื่อมต่อ'}`;
             }
         });
     </script>

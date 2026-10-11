@@ -133,7 +133,8 @@
 
                 <!-- ช่องรหัสนักศึกษา/อีเมล -->
                 <div>
-                    <label for="email" class="mb-2 block text-sm font-medium text-slate-700" data-i18n="email_or_student_id">
+                    <label for="email" class="mb-2 block text-sm font-medium text-slate-700"
+                        data-i18n="email_or_student_id">
                         รหัสนักศึกษา / รหัสอาจารย์ / รหัสบุคลากร หรืออีเมล
                     </label>
 
@@ -141,8 +142,9 @@
                         <i class="fa-solid fa-user absolute left-4 top-1/2
                                    -translate-y-1/2 text-slate-400"></i>
 
-                        <input type="text" id="email" name="email" placeholder="กรอกรหัสนักศึกษา รหัสอาจารย์ รหัสบุคลากร หรืออีเมล" data-i18n-placeholder="placeholder_email_id"
-                            autocomplete="username" required class="w-full rounded-lg border border-slate-300
+                        <input type="text" id="email" name="email"
+                            placeholder="กรอกรหัสนักศึกษา รหัสอาจารย์ รหัสบุคลากร หรืออีเมล"
+                            data-i18n-placeholder="placeholder_email_id" autocomplete="username" required class="w-full rounded-lg border border-slate-300
                                    py-3 pl-11 pr-4 text-sm outline-none
                                    transition placeholder:text-slate-400
                                    focus:border-primary-pink
@@ -168,8 +170,8 @@
                         <i class="fa-solid fa-lock absolute left-4 top-1/2
                                    -translate-y-1/2 text-slate-400"></i>
 
-                        <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน" data-i18n-placeholder="placeholder_password"
-                            autocomplete="current-password" required class="w-full rounded-lg border border-slate-300
+                        <input type="password" id="password" name="password" placeholder="กรอกรหัสผ่าน"
+                            data-i18n-placeholder="placeholder_password" autocomplete="current-password" required class="w-full rounded-lg border border-slate-300
                                    py-3 pl-11 pr-12 text-sm outline-none
                                    transition placeholder:text-slate-400
                                    focus:border-primary-pink
@@ -262,10 +264,11 @@
             if (!identifier || !passwordVal) return;
 
             // แสดงสถานะกำลังตรวจสอบ
+            const currentLang = localStorage.getItem('language') || 'th';
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังเข้าสู่ระบบ...';
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> ${currentLang === 'en' ? 'Logging in...' : 'กำลังเข้าสู่ระบบ...'}`;
             loginMessage.className = "rounded-lg bg-blue-50 text-blue-700 border border-blue-200 p-3 text-sm leading-relaxed";
-            loginMessage.textContent = "กำลังตรวจสอบข้อมูลในระบบ...";
+            loginMessage.textContent = currentLang === 'en' ? 'Verifying credentials...' : 'กำลังตรวจสอบข้อมูลในระบบ...';
             loginMessage.classList.remove("hidden");
 
             try {
@@ -293,22 +296,22 @@
                     localStorage.setItem('currentUser', JSON.stringify(data.user));
 
                     loginMessage.className = "rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 p-3 text-sm leading-relaxed font-medium";
-                    loginMessage.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ ${data.user.fullName}`;
+                    loginMessage.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1.5"></i> ${currentLang === 'en' ? 'Login successful! Welcome, ' + data.user.fullName : 'เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ ' + data.user.fullName}`;
 
                     setTimeout(() => {
                         window.location.href = "index.html";
                     }, 1000);
                 } else {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-2"></i> เข้าสู่ระบบ';
+                    submitBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket mr-2"></i> ${currentLang === 'en' ? 'Log In' : 'เข้าสู่ระบบ'}`;
                     loginMessage.className = "rounded-lg bg-rose-50 text-rose-700 border border-rose-200 p-3 text-sm leading-relaxed";
-                    loginMessage.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-600 mr-1.5"></i> ${data.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'}`;
+                    loginMessage.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-600 mr-1.5"></i> ${currentLang === 'en' ? (data.error === 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' ? 'Invalid identifier or password' : data.error) : (data.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง')}`;
                 }
             } catch (err) {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-2"></i> เข้าสู่ระบบ';
+                submitBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket mr-2"></i> ${currentLang === 'en' ? 'Log In' : 'เข้าสู่ระบบ'}`;
                 loginMessage.className = "rounded-lg bg-rose-50 text-rose-700 border border-rose-200 p-3 text-sm leading-relaxed";
-                loginMessage.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5"></i> ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาลองใหม่อีกครั้ง';
+                loginMessage.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-600 mr-1.5"></i> ${currentLang === 'en' ? 'Cannot connect to server. Please try again.' : 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาลองใหม่อีกครั้ง'}`;
             }
         });
     </script>

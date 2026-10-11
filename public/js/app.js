@@ -15,40 +15,50 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebarOverlay = document.getElementById('sidebar-overlay');
 
   // Load and sync current logged in user from database session in localStorage
-  function initCurrentUserProfile() {
+  function getCurrentUserStorageKey() {
     const rawUser = localStorage.getItem('currentUser');
     if (rawUser) {
       try {
         const user = JSON.parse(rawUser);
-        const nameEl = document.getElementById('sidebar-user-name');
-        const idEl = document.getElementById('sidebar-user-id');
-        const avatarEl = document.getElementById('sidebar-user-avatar');
-        if (nameEl && user.fullName) nameEl.textContent = user.fullName;
-        if (idEl && user.studentId) {
-          let rolePrefix = 'ID';
-          if (user.role === 'อาจารย์') rolePrefix = 'อาจารย์';
-          else if (user.role === 'บุคลากร') rolePrefix = 'บุคลากร';
-          idEl.textContent = `${rolePrefix}: ${user.studentId}`;
+        if (user && (user.studentId || user.id || user.email)) {
+          return String(user.studentId || user.id || user.email).trim().toLowerCase();
         }
-        if (avatarEl && (user.avatar || user.fullName)) {
-          avatarEl.textContent = user.avatar || user.fullName.charAt(0).toUpperCase();
-        }
-      } catch (e) {
-        console.error('Error parsing currentUser:', e);
+      } catch (e) { }
+    }
+    return 'guest';
+  }
+
+  function getHistoryKey() {
+    return 'ssru_chat_history_' + getCurrentUserStorageKey();
+  }
+
+  function getCurrentChatIdKey() {
+    return 'ssru_current_chat_id_' + getCurrentUserStorageKey();
+  }
+
+  function initCurrentUserProfile() {
+    const rawUser = localStorage.getItem('currentUser');
+    if (!rawUser) {
+      window.location.href = 'login.html';
+      return;
+    }
+    try {
+      const user = JSON.parse(rawUser);
+      const nameEl = document.getElementById('sidebar-user-name');
+      const idEl = document.getElementById('sidebar-user-id');
+      const avatarEl = document.getElementById('sidebar-user-avatar');
+      if (nameEl && user.fullName) nameEl.textContent = user.fullName;
+      if (idEl && user.studentId) idEl.textContent = `ID: ${user.studentId}`;
+      if (avatarEl && (user.avatar || user.fullName)) {
+        avatarEl.textContent = user.avatar || user.fullName.charAt(0).toUpperCase();
       }
+    } catch (e) {
+      console.error('Error parsing currentUser:', e);
+      window.location.href = 'login.html';
     }
   }
   initCurrentUserProfile();
 
-  // Sidebar Logout Button Handler
-  const btnLogout = document.getElementById('btn-logout');
-  if (btnLogout) {
-    btnLogout.addEventListener('click', (e) => {
-      e.preventDefault();
-      localStorage.removeItem('currentUser');
-      window.location.href = 'login.html';
-    });
-  }
 
   // SSRU Knowledge Base fallback (Bilingual TH/EN)
   const SSRU_RESPONSES = [
@@ -112,6 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
     'การขอผ่อนผันค่าธรรมเนียมการศึกษา': 'Tuition Fee Payment Deferment Request',
     'ขอผ่อนผันค่าเทอม': 'Apply for Tuition Fee Payment Deferment',
     'ผ่อนผันค่าเทอม': 'Tuition Fee Payment Deferment',
+    'คำนวณผ่อนค่าเทอม 3 งวด': 'Calculate Tuition (3 Payments)',
+    'ค่าเทอม 16,500 แบ่งจ่าย 3 งวด งวดละเท่าไหร่': 'Tuition fee 16,500 in 3 installments, how much per term?',
+    'ค่าเทอม 16500 แบ่งจ่าย 3 งวด งวดละเท่าไหร่': 'Tuition fee 16,500 in 3 installments, how much per term?',
     'ขอผ่อนผัน': 'Apply for Tuition Fee Deferment',
     'ผ่อนผัน': 'Tuition Fee Deferment',
     'ตารางสอบปลายภาค': 'Final Examination Schedule',
@@ -257,8 +270,8 @@ document.addEventListener('DOMContentLoaded', () => {
     [/ขอบคุณ/g, 'Thank you']
   ];
 
-  function getWelcomeMessage() {
-    const lang = localStorage.getItem('language') || 'th';
+  function getWelcomeMessage(forcedLang) {
+    const lang = forcedLang || localStorage.getItem('language') || 'th';
     if (lang === 'en') {
       return {
         sender: 'bot',
@@ -275,6 +288,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function translateThToEn(text) {
     if (!text || typeof text !== 'string') return '';
     const clean = text.trim();
+
+    // 0. ข้ามการแปลหากเป็นผลการคำนวณตัวเลข
+    if (clean.startsWith('🧮') || clean.includes('🧮 **')) return clean;
 
     // 1. ถ้าไม่มีภาษาไทยอยู่เลย ให้ส่งกลับได้ทันที
     if (!/[ก-๙]/.test(clean)) return clean;
@@ -323,7 +339,30 @@ document.addEventListener('DOMContentLoaded', () => {
   function translateEnToTh(text) {
     if (!text || typeof text !== 'string') return '';
     const clean = text.trim();
+    if (clean.startsWith('🧮') || clean.includes('🧮 **')) return clean;
     if (/[ก-๙]/.test(clean)) return clean;
+
+    const exactMap = {
+      'Semester 2 Course Registration Schedule & Procedures': 'การลงทะเบียนเรียนภาคเรียนที่ 2',
+      'Course Registration Schedule & Procedures': 'การลงทะเบียนเรียนภาคเรียน',
+      'Course Registration Procedures': 'ขั้นตอนการลงทะเบียนเรียน',
+      'Course Registration': 'การลงทะเบียนเรียน',
+      'Tuition Fee Payment Deferment Procedures': 'ขั้นตอนขอผ่อนผันค่าเทอม',
+      'Tuition Fee Payment Deferment Request': 'การขอผ่อนผันค่าธรรมเนียมการศึกษา',
+      'Tuition Fee Deferment': 'การผ่อนผันค่าธรรมเนียมการศึกษา',
+      'Calculate Tuition (3 Payments)': 'คำนวณผ่อนค่าเทอม 3 งวด',
+      'Tuition fee 16,500 in 3 installments, how much per term?': 'ค่าเทอม 16,500 แบ่งจ่าย 3 งวด งวดละเท่าไหร่',
+      'Final Examination Schedule': 'ตารางสอบปลายภาค',
+      'Midterm Examination Schedule': 'ตารางสอบกลางภาค',
+      'Student Examination Schedule': 'ตารางสอบนักศึกษา',
+      'Scholarships and Student Loans 2025': 'ทุนการศึกษา ปี 2568',
+      'Scholarships': 'ทุนการศึกษา',
+      'Scholarships and Financial Aid': 'ทุนการศึกษาและ กยศ./กรอ.',
+      'Translate: What time is the Office of the Registrar open and where is it located?': 'แปลภาษา: ฝ่ายทะเบียนและประมวลผลเปิดกี่โมงและตั้งอยู่ที่ไหน',
+      'What time is the Office of the Registrar open and where is it located?': 'ฝ่ายทะเบียนและประมวลผลเปิดกี่โมงและตั้งอยู่ที่ไหน',
+      'New Chat': 'การสนทนาใหม่'
+    };
+    if (exactMap[clean]) return exactMap[clean];
 
     const dictEnToTh = [
       [/Suan Sunandha Rajabhat University \(SSRU\)/gi, 'มหาวิทยาลัยราชภัฏสวนสุนันทา'],
@@ -376,23 +415,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!botText || typeof botText !== 'string') return '';
     const clean = botText.trim();
 
+    // ข้ามหากเป็นผลการคำนวณตัวเลข
+    if (clean.startsWith('🧮') || clean.includes('🧮 **')) {
+      return clean;
+    }
+
     // ข้อความต้อนรับ
-    if (clean.includes('สวัสดีค่ะ ดิฉันคือ SSRU Chatbot') || clean.includes('ยินดีให้บริการค่ะ มีเรื่องใดให้ช่วยเหลือ')) {
-      return getWelcomeMessage().text;
+    if (clean.includes('สวัสดีค่ะ ดิฉันคือ SSRU Chatbot') || clean.includes('ยินดีให้บริการค่ะ มีเรื่องใดให้ช่วยเหลือ') || clean.includes('How may I assist you today') || clean.includes('intelligent assistant for Suan Sunandha')) {
+      return getWelcomeMessage('en').text;
     }
 
     // เทียบกับคลังคำตอบมาตรฐานของ SSRU
     for (const item of SSRU_RESPONSES) {
-      if (item.response && (clean === item.response.trim() || clean.includes(item.response.trim()) || item.response.includes(clean))) {
+      if (item.response && (clean === item.response.trim() || clean.includes(item.response.trim().substring(0, 30)) || item.response.includes(clean))) {
         return item.responseEn || translateThToEn(item.response);
       }
     }
 
     // ทักทาย / ขอบคุณ / คำตอบทั่วไป
-    if (clean.includes('สวัสดีค่ะ ดิฉันคือ SSRU Chatbot') || clean.includes('มีอะไรให้ SSRU Chatbot ช่วยเหลือ')) {
+    if (clean.includes('สวัสดีค่ะ ดิฉันคือ SSRU Chatbot') || clean.includes('มีอะไรให้ SSRU Chatbot ช่วยเหลือ') || clean.includes('ยินดีให้บริการข้อมูลสด Real-time')) {
       return 'Hello! I am SSRU Chatbot, your AI assistant for Suan Sunandha Rajabhat University. How can I help you today?';
     }
-    if (clean.includes('ยินดีให้บริการค่ะ') || clean.includes('มีเรื่องอื่นต้องการสอบถามเพิ่มเติม')) {
+    if (clean.includes('ยินดีให้บริการค่ะ') || clean.includes('มีเรื่องอื่นต้องการสอบถามเพิ่มเติม') || clean.includes('มีเรื่องอื่นต้องการสอบถามเกี่ยวกับทะเบียนการศึกษา')) {
       return 'You are very welcome! Please feel free to ask if you have any further questions about SSRU.';
     }
     if (clean.includes('ข้อมูลติดต่อ ฝ่ายทะเบียนและประมวลผล')) {
@@ -413,24 +457,30 @@ document.addEventListener('DOMContentLoaded', () => {
   function getDisplayBotTextTh(botText) {
     if (!botText || typeof botText !== 'string') return '';
     const clean = botText.trim();
-    if (clean.includes('Hello! I am SSRU Chatbot')) {
-      return 'สวัสดีค่ะ ดิฉันคือ SSRU Chatbot ผู้ช่วยอัจฉริยะมหาวิทยาลัยราชภัฏสวนสุนันทา ยินดีให้บริการค่ะ มีเรื่องใดให้ช่วยเหลือสอบถามได้เลยนะคะ';
+    if (clean.startsWith('🧮') || clean.includes('🧮 **')) {
+      return clean;
+    }
+    if (clean.includes('Hello! I am SSRU Chatbot') || clean.includes('How may I assist you today') || clean.includes('intelligent assistant for Suan Sunandha')) {
+      return getWelcomeMessage('th').text;
+    }
+    if (clean.includes('You are very welcome') || clean.includes('You are welcome')) {
+      return 'ยินดีให้บริการค่ะ มีเรื่องอื่นต้องการสอบถามเกี่ยวกับทะเบียนการศึกษา SSRU เพิ่มเติมบอกได้เสมอเลยนะคะ';
     }
     for (const item of SSRU_RESPONSES) {
-      if (item.responseEn && (clean === item.responseEn.trim() || clean.includes(item.responseEn.trim()))) {
+      if (item.responseEn && (clean === item.responseEn.trim() || clean.includes(item.responseEn.trim().substring(0, 30)))) {
         return item.response;
       }
     }
     return translateEnToTh(clean);
   }
 
-  // State Management & LocalStorage Persistence
+  // State Management & LocalStorage Persistence (Per-User Isolation)
   let historyData = loadHistoryFromStorage();
-  let currentHistoryId = localStorage.getItem('ssru_current_chat_id') || (historyData[0] ? historyData[0].id : '1');
+  let currentHistoryId = localStorage.getItem(getCurrentChatIdKey()) || (historyData[0] ? historyData[0].id : '1');
 
   function loadHistoryFromStorage() {
     try {
-      const saved = localStorage.getItem('ssru_chat_history');
+      const saved = localStorage.getItem(getHistoryKey());
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -442,9 +492,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const currentLang = localStorage.getItem('language') || 'th';
     const defaultTitle = currentLang === 'en' ? 'New Chat' : 'การสนทนาใหม่';
+    const initialId = Date.now().toString();
     return [
       {
-        id: '1',
+        id: initialId,
         title: defaultTitle,
         messages: [getWelcomeMessage()]
       }
@@ -453,8 +504,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function saveHistoryToStorage() {
     try {
-      localStorage.setItem('ssru_chat_history', JSON.stringify(historyData));
-      localStorage.setItem('ssru_current_chat_id', currentHistoryId);
+      localStorage.setItem(getHistoryKey(), JSON.stringify(historyData));
+      localStorage.setItem(getCurrentChatIdKey(), currentHistoryId);
     } catch (e) {
       console.error('Failed to save chat history to localStorage', e);
     }
@@ -577,9 +628,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderTranscript(messages) {
     if (!chatMessages) return;
     chatMessages.innerHTML = '';
+    const currentLang = localStorage.getItem('language') || 'th';
     messages.forEach(msg => {
-      // ปรับเปลี่ยนการแสดงผลข้อความของผู้ใช้ตามโหมดภาษา
-      const displayText = msg.sender === 'user' ? getDisplayUserText(msg.text) : msg.text;
+      // ปรับเปลี่ยนการแสดงผลข้อความของผู้ใช้และบอทตามโหมดภาษา
+      let displayText = msg.text;
+      if (msg.sender === 'user') {
+        displayText = currentLang === 'en' ? getDisplayUserText(msg.text) : getDisplayUserTextTh(msg.text);
+      } else if (msg.sender === 'bot') {
+        displayText = currentLang === 'en' ? getDisplayBotText(msg.text) : getDisplayBotTextTh(msg.text);
+      }
       appendMessageUI(msg.sender, displayText);
     });
     scrollToBottom();
@@ -703,16 +760,292 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       hideTypingIndicator();
       currentChat.messages.push({ sender: 'bot', text: botReply });
-      appendMessageUI('bot', botReply);
+      const currentLang = localStorage.getItem('language') || 'th';
+      const displayReply = currentLang === 'en' ? getDisplayBotText(botReply) : getDisplayBotTextTh(botReply);
+      appendMessageUI('bot', displayReply);
       saveHistoryToStorage();
       scrollToBottom();
     }, 500);
+  }
+
+  // Helper format number
+  function formatNumber(num) {
+    if (num === 'Infinity') return 'ไม่สิ้นสุด (Infinity)';
+    if (typeof num !== 'number' || isNaN(num)) return num;
+    const parts = num.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
+  }
+
+  // Safe arithmetic evaluator (Shunting-yard algorithm, no eval)
+  function safeEvalArithmetic(expr) {
+    let clean = expr
+      .replace(/×/g, '*')
+      .replace(/x/gi, '*')
+      .replace(/÷/g, '/')
+      .replace(/,/g, '')
+      .trim();
+
+    const tokens = clean.match(/(\d+\.?\d*|\+|\-|\*|\/|\^|\(|\)|%)/g);
+    if (!tokens || tokens.length === 0) return null;
+
+    const outputQueue = [];
+    const opStack = [];
+    const precedence = { '+': 1, '-': 1, '*': 2, '/': 2, '%': 2, '^': 3 };
+    const rightAssoc = { '^': true };
+
+    let lastToken = null;
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      const num = parseFloat(token);
+
+      if (!isNaN(num)) {
+        outputQueue.push(num);
+      } else if (token in precedence) {
+        if (token === '-' && (lastToken === null || lastToken === '(' || lastToken in precedence)) {
+          outputQueue.push(0);
+        }
+        while (
+          opStack.length > 0 &&
+          opStack[opStack.length - 1] in precedence &&
+          ((!rightAssoc[token] && precedence[token] <= precedence[opStack[opStack.length - 1]]) ||
+            (rightAssoc[token] && precedence[token] < precedence[opStack[opStack.length - 1]]))
+        ) {
+          outputQueue.push(opStack.pop());
+        }
+        opStack.push(token);
+      } else if (token === '(') {
+        opStack.push(token);
+      } else if (token === ')') {
+        while (opStack.length > 0 && opStack[opStack.length - 1] !== '(') {
+          outputQueue.push(opStack.pop());
+        }
+        if (opStack.length === 0) return null;
+        opStack.pop();
+      } else {
+        return null;
+      }
+      lastToken = token;
+    }
+
+    while (opStack.length > 0) {
+      const op = opStack.pop();
+      if (op === '(' || op === ')') return null;
+      outputQueue.push(op);
+    }
+
+    const evalStack = [];
+    for (const token of outputQueue) {
+      if (typeof token === 'number') {
+        evalStack.push(token);
+      } else {
+        if (evalStack.length < 2) return null;
+        const b = evalStack.pop();
+        const a = evalStack.pop();
+        let res;
+        switch (token) {
+          case '+': res = a + b; break;
+          case '-': res = a - b; break;
+          case '*': res = a * b; break;
+          case '/':
+            if (b === 0) return 'Infinity';
+            res = a / b;
+            break;
+          case '%': res = a % b; break;
+          case '^': res = Math.pow(a, b); break;
+          default: return null;
+        }
+        evalStack.push(res);
+      }
+    }
+
+    return evalStack.length === 1 ? evalStack[0] : null;
+  }
+
+  // Master Math & Tuition Calculator Function
+  function evaluateMathAndTuition(query, lang = 'th') {
+    if (!query || typeof query !== 'string') return null;
+    const clean = query.trim();
+    const isEn = lang === 'en';
+
+    // 1. Tuition Installment / Deferment Breakdown
+    const installmentRegexTh = /(?:ค่าเทอม|ค่าธรรมเนียม|ยอดเงิน|เงิน)?\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:บาท)?\s*(?:แบ่ง|ผ่อน|จ่าย|ขอผ่อนผัน|แบ่งจ่าย|หาร)\s*([0-9]+)\s*งวด/i;
+    const installmentRegexEn = /(?:tuition|fee|amount)?\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:baht|thb)?\s*(?:in|into|for|divide by|over)?\s*([0-9]+)\s*(?:installments|terms|parts)/i;
+
+    let match = clean.match(installmentRegexTh) || clean.match(installmentRegexEn);
+    if (match) {
+      const total = parseFloat(match[1].replace(/,/g, ''));
+      const parts = parseInt(match[2], 10);
+      if (!isNaN(total) && !isNaN(parts) && parts > 0) {
+        const perPart = total / parts;
+        if (isEn) {
+          return `🧮 **Tuition Installment Calculation (SSRU Deferment Breakdown):**\n\n` +
+            `• Total Tuition: **${formatNumber(total)} THB**\n` +
+            `• Installments: **${parts} payments**\n` +
+            `• Estimated Payment per Installment: **${formatNumber(perPart)} THB / installment**\n\n` +
+            `📌 *Note:* According to the SSRU Office of the Registrar and Student Development Division, deferment is submitted via reg.ssru.ac.th during the academic calendar enrollment period. The 1st installment is typically paid at registration, followed by subsequent scheduled deadlines.`;
+        }
+        return `🧮 **การคำนวณแบ่งจ่ายค่าธรรมเนียมการศึกษา (Tuition Installment Breakdown):**\n\n` +
+          `• ยอดค่าเทอมรวม: **${formatNumber(total)} บาท**\n` +
+          `• จำนวนงวดที่ขอผ่อนผัน: **${parts} งวด**\n` +
+          `• ค่างวดโดยประมาณ: **${formatNumber(perPart)} บาท / งวด**\n\n` +
+          `📌 *คำแนะนำ:* นักศึกษาสามารถยื่นคำร้องขอผ่อนผันค่าเทอมออนไลน์ผ่านระบบ reg.ssru.ac.th ตามปฏิทินการศึกษา โดยงวดที่ 1 ชำระช่วงลงทะเบียนเรียน และงวดถัดไปชำระตามกำหนดที่มหาวิทยาลัยประกาศค่ะ`;
+      }
+    }
+
+    // 2. Tuition Credit Calculation
+    const creditRegexTh = /([0-9]+)\s*หน่วยกิต(?:\s*(?:หน่วยกิตละ|ละ)\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:บาท)?)?(?:\s*(?:รวม|บวก|และ)?(?:\s*(?:ค่าบำรุง(?:การศึกษา)?|ค่าธรรมเนียม))?\s*([0-9,]+(?:\.[0-9]+)?))?/i;
+    const creditRegexEn = /([0-9]+)\s*credits?(?:\s*(?:at|@)\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:baht)?)?(?:\s*(?:\+|plus|fee|maintenance)\s*([0-9,]+(?:\.[0-9]+)?))?/i;
+
+    match = clean.match(creditRegexTh) || clean.match(creditRegexEn);
+    if (match) {
+      const credits = parseInt(match[1], 10);
+      const rate = match[2] ? parseFloat(match[2].replace(/,/g, '')) : 500;
+      const fee = match[3] ? parseFloat(match[3].replace(/,/g, '')) : 0;
+      const creditSubtotal = credits * rate;
+      const grandTotal = creditSubtotal + fee;
+
+      if (isEn) {
+        return `🧮 **Tuition Credit Fee Calculation:**\n\n` +
+          `• Registered Credits: **${credits} credits**\n` +
+          `• Rate per Credit: **${formatNumber(rate)} THB / credit**\n` +
+          `• Credits Subtotal: **${formatNumber(creditSubtotal)} THB**\n` +
+          (fee > 0 ? `• University Maintenance / Fixed Fees: **${formatNumber(fee)} THB**\n` : '') +
+          `• **Estimated Total Tuition: ${formatNumber(grandTotal)} THB**\n\n` +
+          `📌 *Note:* Exact credit fees vary by program and faculty. You can print the official invoice from reg.ssru.ac.th.`;
+      }
+      return `🧮 **การคำนวณค่าเทอมตามหน่วยกิต (Credit Fee Calculation):**\n\n` +
+        `• จำนวนหน่วยกิตที่ลงเรียน: **${credits} หน่วยกิต**\n` +
+        `• ค่าหน่วยกิตละ: **${formatNumber(rate)} บาท / หน่วยกิต**\n` +
+        `• ยอดรวมค่าหน่วยกิต: **${formatNumber(creditSubtotal)} บาท**\n` +
+        (fee > 0 ? `• ค่าธรรมเนียมบำรุงการศึกษา: **${formatNumber(fee)} บาท**\n` : '') +
+        `• **ยอดรวมค่าธรรมเนียมโดยประมาณ: ${formatNumber(grandTotal)} บาท**\n\n` +
+        `📌 *คำแนะนำ:* อัตราค่าหน่วยกิตและค่าธรรมเนียมขึ้นอยู่กับหลักสูตรและคณะ สามารถตรวจสอบใบแจ้งชำระเงินจริง (Invoice) ได้ที่ระบบ e-Regis (reg.ssru.ac.th) ค่ะ`;
+    }
+
+    // 3. Discount / Scholarship Percentage Calculation
+    const discountRegex = /(?:ค่าเทอม|ราคา|ยอดเงิน)?\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:บาท)?\s*(?:ได้ทุน|ลด|ส่วนลด|หัก)?\s*([0-9,]+(?:\.[0-9]+)?)\s*%/i;
+    const percentOfRegex = /([0-9,]+(?:\.[0-9]+)?)\s*%\s*(?:ของ|จาก|of)\s*([0-9,]+(?:\.[0-9]+)?)/i;
+
+    let pMatch = clean.match(percentOfRegex);
+    if (pMatch) {
+      const pct = parseFloat(pMatch[1].replace(/,/g, ''));
+      const base = parseFloat(pMatch[2].replace(/,/g, ''));
+      if (!isNaN(pct) && !isNaN(base)) {
+        const result = (pct / 100) * base;
+        if (isEn) {
+          return `🧮 **Percentage Calculation:**\n\n` +
+            `• Formula: ${pct}% × ${formatNumber(base)}\n` +
+            `• **Result: ${formatNumber(result)}**`;
+        }
+        return `🧮 **การคำนวณร้อยละ / เปอร์เซ็นต์:**\n\n` +
+          `• วิธีคำนวณ: ${pct}% × ${formatNumber(base)}\n` +
+          `• **ผลลัพธ์: ${formatNumber(result)}**`;
+      }
+    }
+
+    let dMatch = clean.match(discountRegex);
+    if (dMatch && clean.includes('%')) {
+      const total = parseFloat(dMatch[1].replace(/,/g, ''));
+      const pct = parseFloat(dMatch[2].replace(/,/g, ''));
+      if (!isNaN(total) && !isNaN(pct)) {
+        const discountAmount = (pct / 100) * total;
+        const netPay = total - discountAmount;
+        if (isEn) {
+          return `🧮 **Scholarship / Discount Calculation:**\n\n` +
+            `• Original Amount: **${formatNumber(total)} THB**\n` +
+            `• Scholarship / Discount (${pct}%): **-${formatNumber(discountAmount)} THB**\n` +
+            `• **Net Amount to Pay: ${formatNumber(netPay)} THB**`;
+        }
+        return `🧮 **การคำนวณส่วนลด / ทุนการศึกษา:**\n\n` +
+          `• ยอดเดิม: **${formatNumber(total)} บาท**\n` +
+          `• ส่วนลด / ทุนที่ได้รับ (${pct}%): **-${formatNumber(discountAmount)} บาท**\n` +
+          `• **ยอดสุทธิที่ต้องชำระ: ${formatNumber(netPay)} บาท**`;
+      }
+    }
+
+    // 4. Rate per unit x Quantity / Daily / Monthly Multiplier
+    // e.g. "วันละ 120 บาท 30 วัน", "30 วัน วันละ 120 บาท", "เดือนละ 3500 บาท 12 เดือน"
+    const ratePatternTh1 = /(?:ละ|วันละ|คนละ|เดือนละ|ปีละ|ชิ้นละ|ตัวละ|ข้อละ|หน่วยละ|รายการละ)\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:บาท)?\s*(?:จำนวน|ทั้งหมด)?\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:วัน|คน|เดือน|ปี|ชิ้น|ตัว|ชุด|อัน|ครั้ง|รอบ|หน่วย)/i;
+    const ratePatternTh2 = /([0-9,]+(?:\.[0-9]+)?)\s*(?:วัน|คน|เดือน|ปี|ชิ้น|ตัว|ชุด|อัน|ครั้ง|รอบ|หน่วย)\s*(?:ละ|วันละ|คนละ|เดือนละ|ปีละ|ชิ้นละ|ตัวละ|ข้อละ|หน่วยละ|รายการละ)\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:บาท)?/i;
+    const ratePatternEn1 = /(?:at|@)?\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:baht|thb|\$)?\s*(?:per day|per month|per person|each|per unit)\s*(?:for)?\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:days|months|people|units|items)/i;
+    const ratePatternEn2 = /([0-9,]+(?:\.[0-9]+)?)\s*(?:days|months|people|units|items)\s*(?:at|@)\s*([0-9,]+(?:\.[0-9]+)?)\s*(?:baht|thb|\$)?\s*(?:each|per day|per month|per person|per unit)?/i;
+
+    let rMatch = clean.match(ratePatternTh1) || clean.match(ratePatternEn1);
+    let rateVal, countVal;
+    if (rMatch) {
+      rateVal = parseFloat(rMatch[1].replace(/,/g, ''));
+      countVal = parseFloat(rMatch[2].replace(/,/g, ''));
+    } else {
+      rMatch = clean.match(ratePatternTh2) || clean.match(ratePatternEn2);
+      if (rMatch) {
+        countVal = parseFloat(rMatch[1].replace(/,/g, ''));
+        rateVal = parseFloat(rMatch[2].replace(/,/g, ''));
+      }
+    }
+
+    if (rMatch && !isNaN(rateVal) && !isNaN(countVal)) {
+      const totalMultiplier = rateVal * countVal;
+      if (isEn) {
+        return `🧮 **Quantity & Unit Rate Calculation:**\n\n` +
+          `• Rate per Unit: **${formatNumber(rateVal)}**\n` +
+          `• Quantity / Duration: **${formatNumber(countVal)}**\n` +
+          `• Formula: ${formatNumber(rateVal)} × ${formatNumber(countVal)}\n` +
+          `• **Total: ${formatNumber(totalMultiplier)}**`;
+      }
+      return `🧮 **การคำนวณอัตราต่อหน่วยและจำนวน (Unit Rate & Total):**\n\n` +
+        `• อัตราต่อหน่วย: **${formatNumber(rateVal)}**\n` +
+        `• จำนวน / ระยะเวลา: **${formatNumber(countVal)}**\n` +
+        `• วิธีคิด: ${formatNumber(rateVal)} × ${formatNumber(countVal)}\n` +
+        `• **ยอดรวมทั้งหมด: ${formatNumber(totalMultiplier)}**`;
+    }
+
+    // 5. Natural Thai / English Arithmetic Words
+    let expr = clean
+      .replace(/(?:คำนวณ|หาค่า|ช่วยคิดเลข|ช่วยคิดหน่อย|คิดเลข|เลข|what is|calculate|solve)\s*:?/gi, '')
+      .replace(/(?:ได้เท่าไหร่|เท่ากับเท่าไหร่|ได้เท่าไร|เท่ากับอะไร|คือเท่าไหร่|เหลือเท่าไหร่|จะเป็นเงินกี่บาท|เป็นเงินกี่บาท|กี่บาท|\?)/gi, '')
+      .trim();
+
+    expr = expr
+      .replace(/\s*(?:บวก|plus|add)\s*/gi, ' + ')
+      .replace(/\s*(?:ลบ|minus|subtract)\s*/gi, ' - ')
+      .replace(/\s*(?:คูณ|times|multiplied by)\s*/gi, ' * ')
+      .replace(/\s*(?:หารด้วย|หาร|divided by|divide)\s*/gi, ' / ')
+      .replace(/\s*(?:ยกกำลัง|power|pow)\s*/gi, ' ^ ')
+      .replace(/×/g, '*')
+      .replace(/÷/g, '/');
+
+    if (/[\+\-\*\/\^\%]/.test(expr) && /\d/.test(expr)) {
+      const sanitized = expr.replace(/[^\d\+\-\*\/\^\%\(\)\.\,\s]/g, '').trim();
+      if (sanitized && /[\+\-\*\/\^]/.test(sanitized)) {
+        const res = safeEvalArithmetic(sanitized);
+        if (res !== null) {
+          const formattedRes = formatNumber(res);
+          if (isEn) {
+            return `🧮 **Calculation Result:**\n\n` +
+              `• Expression: \`${sanitized.replace(/\s+/g, ' ')}\`\n` +
+              `• **Answer: ${formattedRes}**`;
+          }
+          return `🧮 **ผลการคำนวณ:**\n\n` +
+            `• โจทย์: \`${sanitized.replace(/\s+/g, ' ')}\`\n` +
+            `• **คำตอบ: ${formattedRes}**`;
+        }
+      }
+    }
+
+    return null;
   }
 
   function generateResponse(msg) {
     const lower = msg.toLowerCase();
     const lang = localStorage.getItem('language') || 'th';
     const isEn = lang === 'en' || /^[A-Za-z0-9\s\.,\?!'-]+$/.test(msg.trim());
+
+    // 0. Check Math and Tuition Calculation
+    const mathResult = evaluateMathAndTuition(msg, isEn ? 'en' : 'th');
+    if (mathResult) {
+      return mathResult;
+    }
 
     for (const item of SSRU_RESPONSES) {
       if (item.keywords.some(kw => lower.includes(kw))) {
@@ -788,8 +1121,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (quickPromptsContainer) {
       quickPromptsContainer.addEventListener('click', (e) => {
         const chip = e.target.closest('.prompt-chip');
-        if (chip && chip.dataset.prompt) {
-          sendMessage(chip.dataset.prompt);
+        if (chip) {
+          const currentLang = localStorage.getItem('language') || 'th';
+          const promptText = (currentLang === 'en' && chip.dataset.promptEn)
+            ? chip.dataset.promptEn
+            : (chip.dataset.prompt || chip.dataset.promptEn);
+          if (promptText) {
+            sendMessage(promptText);
+          }
+        }
+      });
+    }
+
+    const btnLangToggle = document.getElementById('btn-lang-toggle');
+    if (btnLangToggle) {
+      btnLangToggle.addEventListener('click', () => {
+        const current = localStorage.getItem('language') || 'th';
+        const nextLang = current === 'en' ? 'th' : 'en';
+        localStorage.setItem('language', nextLang);
+        if (typeof window.applyAppLanguage === 'function') {
+          window.applyAppLanguage(nextLang);
+        } else {
+          onLanguageChanged(nextLang);
         }
       });
     }
@@ -833,8 +1186,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnConfirmLogout) {
       btnConfirmLogout.addEventListener('click', () => {
-        sessionStorage.clear();
-        localStorage.clear();
+        localStorage.removeItem('currentUser');
         window.location.href = 'login.html';
       });
     }
@@ -925,15 +1277,60 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/'/g, "&#039;");
   }
 
-  // Window Event Listeners
-  window.addEventListener('languageChange', () => {
+  // Comprehensive language change handler
+  function onLanguageChanged(newLang) {
+    const lang = newLang || localStorage.getItem('language') || 'th';
+
+    // 1. Update Lang indicator button in header if present
+    const langIndicator = document.getElementById('lang-indicator');
+    if (langIndicator) {
+      langIndicator.textContent = lang.toUpperCase();
+    }
+
+    // 2. Update default titles of chats in history
+    if (Array.isArray(historyData)) {
+      let changed = false;
+      historyData.forEach(h => {
+        if (h.title === 'การสนทนาใหม่' && lang === 'en') {
+          h.title = 'New Chat';
+          changed = true;
+        } else if (h.title === 'New Chat' && lang === 'th') {
+          h.title = 'การสนทนาใหม่';
+          changed = true;
+        }
+      });
+      if (changed) {
+        saveHistoryToStorage();
+        renderHistoryList();
+      }
+    }
+
+    // 3. Re-render transcript of current chat with active language
     const currentChat = getCurrentChat();
     if (currentChat && currentChat.messages) {
       renderTranscript(currentChat.messages);
+    }
+  }
+
+  // Window Event Listeners
+  window.addEventListener('languageChange', (e) => {
+    onLanguageChanged(e.detail && e.detail.language);
+  });
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'language') {
+      onLanguageChanged(e.newValue);
     }
   });
 
   window.addEventListener('chatHistoryCleared', () => {
     startNewChat();
   });
+
+  // Initial sync of language indicator on page load
+  const initialLang = localStorage.getItem('language') || 'th';
+  const initialLangIndicator = document.getElementById('lang-indicator');
+  if (initialLangIndicator) {
+    initialLangIndicator.textContent = initialLang.toUpperCase();
+  }
 });
