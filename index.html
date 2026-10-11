@@ -254,8 +254,7 @@
         <button
           class="prompt-chip bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 rounded-[20px] px-3.5 py-2 text-[13px] text-slate-700 dark:text-slate-200 whitespace-nowrap flex items-center gap-1.5 transition-all duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.03)] hover:border-primary-pink hover:bg-pink-50 hover:text-primary-pink hover:-translate-y-[1px]"
           data-prompt="ค่าเทอม 16,500 แบ่งจ่าย 3 งวด งวดละเท่าไหร่"
-          data-prompt-en="Tuition fee 16,500 in 3 installments, how much per term?"
-          data-i18n="prompt_calc">
+          data-prompt-en="Tuition fee 16,500 in 3 installments, how much per term?" data-i18n="prompt_calc">
           <i class="fa-solid fa-calculator text-primary-pink text-xs"></i> คำนวณผ่อนค่าเทอม 3 งวด
         </button>
         <button
@@ -317,23 +316,24 @@
     <div id="clear-all-modal"
       class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
       <div id="clear-all-modal-card"
-        class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-all duration-300 text-center">
+        class="bg-white dark:bg-[#1E293B] border border-slate-100 dark:border-slate-700/60 rounded-2xl p-6 w-full max-w-sm shadow-2xl transform scale-95 transition-all duration-300 text-center">
         <div
-          class="w-14 h-14 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-rose-100">
+          class="w-14 h-14 bg-rose-50 dark:bg-rose-900/30 text-rose-500 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 border border-rose-100 dark:border-rose-800/40">
           <i class="fa-solid fa-trash-can"></i>
         </div>
-        <h3 class="text-lg font-semibold text-slate-800 mb-1" data-i18n="confirm_clear_all_title">
+        <h3 class="text-lg font-semibold text-slate-800 dark:text-white mb-1.5" data-i18n="confirm_clear_all_title">
           ยืนยันการล้างแชททั้งหมด</h3>
-        <p class="text-sm text-slate-500 mb-6" data-i18n="confirm_clear_all_desc">
-          คุณต้องการลบประวัติการสนทนาทั้งหมดใช่หรือไม่?
-          (การกระทำนี้ไม่สามารถย้อนกลับได้)</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed" data-i18n="confirm_clear_all_desc">
+          คุณต้องการลบประวัติการสนทนาทั้งหมดใช่หรือไม่?<br>
+          <span class="text-xs text-rose-500/80 dark:text-rose-400/80 mt-1 block">(การกระทำนี้ไม่สามารถย้อนกลับได้)</span>
+        </p>
         <div class="flex items-center gap-3">
           <button type="button" id="btn-cancel-clear-all" data-i18n="cancel"
-            class="flex-1 py-2.5 px-4 border border-slate-200 text-slate-600 rounded-xl text-sm font-medium hover:bg-slate-50 transition-colors cursor-pointer">
+            class="flex-1 py-2.5 px-4 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer">
             ยกเลิก
           </button>
           <button type="button" id="btn-confirm-clear-all" data-i18n="clear_all"
-            class="flex-1 py-2.5 px-4 bg-rose-500 text-white rounded-xl text-sm font-medium hover:bg-rose-600 transition-colors cursor-pointer shadow-md shadow-rose-200">
+            class="flex-1 py-2.5 px-4 bg-rose-500 text-white rounded-xl text-sm font-medium hover:bg-rose-600 transition-colors cursor-pointer shadow-md shadow-rose-200 dark:shadow-none">
             ล้างทั้งหมด
           </button>
         </div>

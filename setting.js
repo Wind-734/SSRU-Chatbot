@@ -35,7 +35,7 @@
 
             // Settings Modals
             clear_modal_title: "ยืนยันการล้างประวัติแชท",
-            clear_modal_desc: "คุณต้องการลบประวัติการสนทนาทั้งหมดใช่หรือไม่? (การกระทำนี้ไม่สามารถย้อนกลับได้)",
+            clear_modal_desc: "คุณต้องการลบประวัติการสนทนาทั้งหมดใช่หรือไม่?<br><span class=\"text-xs text-rose-500/80 dark:text-rose-400/80 mt-1 block\">(การกระทำนี้ไม่สามารถย้อนกลับได้)</span>",
             logout_modal_title: "ยืนยันการออกจากระบบ",
             logout_modal_desc: "คุณต้องการออกจากระบบ SSRU Chatbot ใช่หรือไม่?",
 
@@ -56,7 +56,7 @@
             btn_send: "ส่ง",
             btn_clear_chat: "ล้างการสนทนา",
             confirm_clear_all_title: "ยืนยันการล้างแชททั้งหมด",
-            confirm_clear_all_desc: "คุณต้องการลบประวัติการสนทนาทั้งหมดใช่หรือไม่? (การกระทำนี้ไม่สามารถย้อนกลับได้)",
+            confirm_clear_all_desc: "คุณต้องการลบประวัติการสนทนาทั้งหมดใช่หรือไม่?<br><span class=\"text-xs text-rose-500/80 dark:text-rose-400/80 mt-1 block\">(การกระทำนี้ไม่สามารถย้อนกลับได้)</span>",
 
             // User Profile Page (user.html)
             profile_title: "โปรไฟล์ผู้ใช้",
@@ -169,7 +169,7 @@
 
             // Settings Modals
             clear_modal_title: "Confirm Clear History",
-            clear_modal_desc: "Are you sure you want to clear all chat history? (This action cannot be undone)",
+            clear_modal_desc: "Are you sure you want to clear all chat history?<br><span class=\"text-xs text-rose-500/80 dark:text-rose-400/80 mt-1 block\">(This action cannot be undone)</span>",
             logout_modal_title: "Confirm Logout",
             logout_modal_desc: "Are you sure you want to log out of SSRU Chatbot?",
 
@@ -190,7 +190,7 @@
             btn_send: "Send",
             btn_clear_chat: "Clear Chat",
             confirm_clear_all_title: "Confirm Clear All Chats",
-            confirm_clear_all_desc: "Are you sure you want to delete all chat history? (This action cannot be undone)",
+            confirm_clear_all_desc: "Are you sure you want to delete all chat history?<br><span class=\"text-xs text-rose-500/80 dark:text-rose-400/80 mt-1 block\">(This action cannot be undone)</span>",
 
             // User Profile Page (user.html)
             profile_title: "User Profile",
@@ -286,10 +286,12 @@
                 const icon = el.querySelector("i, svg");
                 if (icon) {
                     const iconClone = icon.cloneNode(true);
-                    el.innerText = "";
+                    el.innerHTML = "";
                     el.appendChild(iconClone);
                     const spaceNode = document.createTextNode(" " + dict[key]);
                     el.appendChild(spaceNode);
+                } else if (dict[key].includes("<br>") || dict[key].includes("<span")) {
+                    el.innerHTML = dict[key];
                 } else {
                     el.innerText = dict[key];
                 }
