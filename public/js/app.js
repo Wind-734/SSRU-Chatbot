@@ -24,7 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const idEl = document.getElementById('sidebar-user-id');
         const avatarEl = document.getElementById('sidebar-user-avatar');
         if (nameEl && user.fullName) nameEl.textContent = user.fullName;
-        if (idEl && user.studentId) idEl.textContent = `ID: ${user.studentId}`;
+        if (idEl && user.studentId) {
+          let rolePrefix = 'ID';
+          if (user.role === 'อาจารย์') rolePrefix = 'อาจารย์';
+          else if (user.role === 'บุคลากร') rolePrefix = 'บุคลากร';
+          idEl.textContent = `${rolePrefix}: ${user.studentId}`;
+        }
         if (avatarEl && (user.avatar || user.fullName)) {
           avatarEl.textContent = user.avatar || user.fullName.charAt(0).toUpperCase();
         }
